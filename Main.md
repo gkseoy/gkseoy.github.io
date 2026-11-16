@@ -101,6 +101,13 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
   <dd>SQLD (XX)<br>Linux Master Level 2 (XX)</dd>
 </dl>
 
+<dt>Scholarships</dt>
+<dd>
+  Munju Scholarship Foundation (Fall 2025)<br>
+  Beomeun Scholarship Foundation (Spring 2026)
+  Jongha Scholarship Association (Spring2026–Winter2027)<br>
+</dd>
+
 ### Selected Work & Credentials
 
 <ul class="document-list">
