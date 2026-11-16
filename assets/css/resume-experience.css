@@ -1,0 +1,69 @@
+.resume-experience-trigger {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link-color);
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.resume-experience-trigger:hover {
+  color: var(--link-hover-color);
+}
+
+.resume-experience-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(58rem, calc(100% - 2rem));
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 1rem;
+  background: var(--body-bg-color, #fff);
+  color: var(--body-color, #030920);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.22);
+}
+
+.resume-experience-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+body:has(.resume-experience-dialog[open]) {
+  overflow: hidden;
+}
+
+.resume-experience-panel {
+  position: relative;
+  min-height: min(40rem, 78vh);
+  min-height: min(40rem, 78dvh);
+  padding: 3.25rem clamp(1rem, 4vw, 2rem) 1.75rem;
+}
+
+.resume-experience-close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  display: grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.resume-experience-close:hover {
+  background: rgba(0, 0, 0, 0.08);
+}

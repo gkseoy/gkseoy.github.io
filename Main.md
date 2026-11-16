@@ -60,14 +60,33 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
 <dl class="resume-grid resume-timeline">
   <div class="resume-row">
     <dt>Feb 2026 – Present</dt>
-    <dd>Undergraduate Research Intern at <em>NOSLab (Prof. DongHyun Kang)</em></dd>
+    <dd>Undergraduate Research Intern at <em><a href="https://noslab.github.io/">NOSLab</a> (Prof. DongHyun Kang)</em></dd>
   </div>
 
   <div class="resume-row">
     <dt>Jan 2024 – Present</dt>
-    <dd>Various part-time jobs</dd>
+    <dd>
+      <button type="button" id="part-time-experience-trigger" class="resume-experience-trigger" aria-controls="part-time-experience" aria-haspopup="dialog">
+        Various part-time jobs
+      </button>
+    </dd>
   </div>
 </dl>
+
+<link rel="stylesheet" href="{{ '/assets/css/resume-experience.css' | relative_url }}">
+
+<dialog id="part-time-experience" class="resume-experience-dialog" aria-label="Various part-time jobs">
+  <div class="resume-experience-panel">
+    <form method="dialog">
+      <button type="submit" class="resume-experience-close" aria-label="Close" autofocus>×</button>
+    </form>
+    <div id="part-time-experience-content">
+      <!-- Add part-time work details here. -->
+    </div>
+  </div>
+</dialog>
+
+<script src="{{ '/assets/js/resume-experience.js' | relative_url }}" defer></script>
 
 ### Skills
 
