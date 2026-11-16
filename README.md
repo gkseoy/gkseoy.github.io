@@ -1,6 +1,6 @@
 # Seoyoung's Blog
 
-Jekyll로 만든 개인 GitHub Pages 블로그입니다.
+Jekyll과 [Monophase](https://github.com/zivhub/monophase) 테마로 만든 개인 GitHub Pages 블로그입니다.
 
 ## 내용 수정
 

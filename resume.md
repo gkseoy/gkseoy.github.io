@@ -1,18 +1,11 @@
 ---
-layout: default
+layout: page
 title: "이력"
 permalink: /resume/
 description: "Seoyoung의 학력, 경험, 프로젝트와 기술"
 ---
 
-<header class="page-intro">
-  <h1 class="page-title">이력</h1>
-</header>
-
-<div class="contact-card">
-  <span>이메일</span>
-  <a href="mailto:{{ site.email }}">{{ site.email }}</a>
-</div>
+이메일 · [{{ site.email }}](mailto:{{ site.email }})
 
 ## 학력
 

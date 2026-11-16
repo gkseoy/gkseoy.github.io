@@ -1,0 +1,18 @@
+{% assign reviews = site.categories['paper-review'] %}
+{% if reviews.size > 0 %}
+  {% assign review_limit = include.limit | default: reviews.size %}
+  <div class="posts">
+    {% for review in reviews limit: review_limit %}
+      <article class="post">
+        <h2 class="post-title"><a href="{{ review.url | relative_url }}">{{ review.title | escape }}</a></h2>
+        <time datetime="{{ review.date | date_to_xmlschema }}" class="post-meta">{{ review.date | date: site.date_format }}</time>
+        {% assign summary = review.description | default: review.excerpt | strip_html | normalize_whitespace %}
+        {% if summary != empty %}
+          <p class="post-excerpt">{{ summary | truncate: 130 | escape_once }}</p>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>{{ include.empty_message | escape }}</p>
+{% endif %}
