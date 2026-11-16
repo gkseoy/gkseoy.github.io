@@ -143,3 +143,40 @@ main h2 {
   float: none;
   margin: 0;
 }
+
+/* 사이트 이름은 2pt 키우고, 태그라인은 2pt 줄입니다. */
+.masthead-title > a {
+  font-size: calc(1em + 2pt);
+}
+
+.masthead-title .tagline {
+  font-size: calc(80% - 2pt);
+}
+
+/* 이름 아래 구분선을 내리고, 메뉴와 본문 사이를 좁힙니다. */
+.nav-list {
+  margin-top: 1.5rem;
+}
+
+.masthead {
+  padding-bottom: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* 페이지 제목과 첫 문단 사이를 좁힙니다. */
+main > :is(h1, h2):first-child,
+main > .page > h1:first-child {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+}
+
+/* Email이나 소개 문단 뒤에 첫 섹션까지 여백을 둡니다. */
+main > :is(h1, h2):first-child + p,
+main > .page > h1:first-child + p {
+  margin-bottom: 1.75rem;
+}
+
+main > :is(h1, h2):first-child + p + :is(h2, h3),
+main > .page > h1:first-child + p ~ h2:first-of-type {
+  margin-top: 0;
+}
