@@ -15,18 +15,12 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
     margin: 0 0 1.75rem;
   }
 
-  .resume-grid dd,
-  .resume-references h2,
-  .resume-references p {
+  .resume-grid dd {
     margin: 0;
   }
 
   .resume-grid dt {
     color: var(--muted-color);
-  }
-
-  .resume-references {
-    align-items: baseline;
   }
 
   @media (max-width: 600px) {
@@ -88,7 +82,21 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
   <dd>SQLD (XX)<br>Linux Master Level 2 (XX)</dd>
 </dl>
 
-<div class="resume-grid resume-references">
-  <h2>References</h2>
-  <p>Available upon request</p>
-</div>
+### Selected Work & Credentials
+
+<ul class="document-list">
+{% for resource in site.data.resume_resources %}
+  {% assign resource_url = resource.url %}
+  {% assign resource_path_prefix = resource_url | slice: 0, 1 %}
+  {% if resource_path_prefix == '/' %}
+    {% assign resource_url = resource_url | relative_url %}
+  {% endif %}
+  <li>
+    <a class="document-link" href="{{ resource_url | escape }}">
+      <span class="document-icon" aria-hidden="true"></span>
+      <span class="document-title">{{ resource.title | escape }}</span>
+      {% if resource.type %}<span class="document-meta">{{ resource.type | escape }}</span>{% endif %}
+    </a>
+  </li>
+{% endfor %}
+</ul>

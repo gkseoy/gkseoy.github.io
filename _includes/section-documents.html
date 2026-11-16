@@ -1,0 +1,4 @@
+{%- assign section_documents = site[include.collection] | where_exp: 'entry', 'entry.published != false' | sort: 'date' | reverse -%}
+{%- unless site.future -%}
+  {%- assign section_documents = section_documents | where_exp: 'entry', 'entry.date <= site.time' -%}
+{%- endunless -%}

@@ -13,6 +13,36 @@ author:
 
 remote_theme: zivhub/monophase@085334c67f4e23be3b93c79fbbcedb09a492c5aa
 
+collections:
+  paper_reviews:
+    output: true
+    permalink: /paper-reviews/:name/
+  event_notes:
+    output: true
+    permalink: /event-notes/:name/
+  seminars:
+    output: true
+    permalink: /seminars/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: paper_reviews
+    values:
+      layout: paper-review
+  - scope:
+      path: ""
+      type: event_notes
+    values:
+      layout: page
+      lang: ko
+  - scope:
+      path: ""
+      type: seminars
+    values:
+      layout: page
+      lang: ko
+
 plugins:
   - jekyll-remote-theme
   - jekyll-feed

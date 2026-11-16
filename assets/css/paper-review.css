@@ -1,0 +1,165 @@
+.notion-review {
+  box-sizing: border-box;
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: clamp(1rem, 4vw, 2rem);
+  background: #fff;
+  color: #2c2c2b;
+  color-scheme: light;
+  font: 1rem / 1.5 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.notion-review :is(h1, h2, h3, h4) {
+  color: inherit;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.notion-review h1 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.85rem, 5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.notion-review h2 {
+  margin: 1.4em 0 0.35em;
+  font-size: 1.5rem;
+}
+
+.notion-review h3 {
+  margin: 1.2em 0 0.35em;
+  font-size: 1.25rem;
+}
+
+.notion-review h4 {
+  margin: 1.1em 0 0.35em;
+  font-size: 1.125rem;
+}
+
+.notion-review :is(p, ul, ol) {
+  max-width: none;
+  margin: 0.4rem 0;
+}
+
+.notion-review :is(ul, ol) {
+  padding-left: 1.5rem;
+}
+
+.notion-review li {
+  margin: 0.25rem 0;
+}
+
+.notion-review blockquote {
+  margin: 0.5rem 0;
+  padding: 0.1rem 0 0.1rem 0.875rem;
+  border-left: 3px solid currentColor;
+  color: inherit;
+  opacity: 1;
+}
+
+.notion-review details {
+  margin: 0.4rem 0;
+}
+
+.notion-review details > :not(summary) {
+  margin-left: 1.5rem;
+}
+
+.notion-review summary {
+  cursor: pointer;
+}
+
+.notion-review hr {
+  margin: 1rem 0;
+  border-top-color: #e7e5e2;
+}
+
+.notion-review figure {
+  width: min(100%, var(--figure-width, 704px));
+  margin: 0.65rem auto 1rem;
+}
+
+.notion-review figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 0.35rem;
+  border-radius: 0;
+}
+
+.notion-review figcaption {
+  margin: 0;
+  color: #7d7a75;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.notion-review .notion-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.notion-review .table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.notion-review table {
+  width: 100%;
+  margin: 0.6rem 0;
+  font-size: 0.9rem;
+}
+
+.notion-review :is(th, td) {
+  min-width: 5rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid #e7e5e2;
+  vertical-align: top;
+}
+
+.notion-review th {
+  background: #f7f6f3;
+  font-weight: 600;
+}
+
+.notion-review code {
+  padding: 0.2em 0.4em;
+  background: #211b170d;
+  color: #cf5148;
+  font-size: 0.85em;
+  border-radius: 4px;
+}
+
+.notion-review a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.notion-review .highlight-yellow {
+  background: #d3a80023;
+}
+
+.notion-review .highlight-blue {
+  background: #007cd718;
+}
+
+.notion-review .text-pink {
+  color: #c14c8a;
+}
+
+.notion-review .empty-block {
+  height: 0.5rem;
+}
+
+@media (max-width: 560px) {
+  .notion-review .notion-columns {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}

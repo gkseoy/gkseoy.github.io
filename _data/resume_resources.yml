@@ -1,0 +1,16 @@
+- title: "Personal website source"
+  url: "https://github.com/gkseoy/gkseoy.github.io"
+  type: "Project"
+
+# PDF examples. Upload the file to assets/resume/ before adding its entry.
+# - title: "My paper title"
+#   url: "/assets/resume/my-paper.pdf"
+#   type: "Publication · PDF"
+# - title: "OPIc score report"
+#   url: "/assets/resume/opic-score.pdf"
+#   type: "Credential · PDF"
+#
+# External link example.
+# - title: "My project"
+#   url: "https://example.com/my-project"
+#   type: "Project"

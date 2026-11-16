@@ -1,0 +1,17 @@
+{% include section-documents.html collection=include.collection %}
+{% if section_documents.size > 0 %}
+  {% assign document_limit = include.limit | default: section_documents.size %}
+  <ul class="document-list">
+    {% for entry in section_documents limit: document_limit %}
+      <li>
+        <a class="document-link" href="{{ entry.url | relative_url }}">
+          <span class="document-icon" aria-hidden="true"></span>
+          <span class="document-title">{{ entry.title | escape }}</span>
+          <time class="document-meta" datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: site.date_format }}</time>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>{{ include.empty_message | escape }}</p>
+{% endif %}
