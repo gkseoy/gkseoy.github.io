@@ -1,33 +1,19 @@
 title: "Seoyoung"
 description: "컴퓨터공학을 공부하며 배운 것과 읽은 논문을 기록합니다."
 email: "zxwmqxx@gmail.com"
+github_username: gkseoy
 url: "https://gkseoy.github.io"
 baseurl: ""
-
-remote_theme: samarsault/plainwhite-jekyll
+lang: ko
+date_format: "%Y-%m-%d"
 
 plugins:
-  - jekyll-remote-theme
+  - jekyll-seo-tag
 
-plainwhite:
-  name: "Seoyoung"
-  tagline: "Computer Engineering Student"
-  date_format: "%Y-%m-%d"
-  html_lang: "ko"
-  dark_mode: true
-  portfolio_image: "assets/portfolio.png"
-  condensed_mobile:
-    - post
-    - page
-
-  social_links:
-    github: gkseoy
-    email: zxwmqxx@gmail.com
-
-  navigation:
-    - title: "홈"
-      url: "/"
-    - title: "이력"
-      url: "/resume/"
-    - title: "논문 리뷰"
-      url: "/paper-reviews/"
+navigation:
+  - title: "홈"
+    url: "/"
+  - title: "이력"
+    url: "/resume/"
+  - title: "논문 리뷰"
+    url: "/paper-reviews/"
