@@ -1,13 +1,9 @@
 <header class="site-header">
-  <nav class="container" aria-label="Main navigation">
-    <ul class="site-nav-list" role="list">
-      {% for item in site.data.navigation %}
-        <li>
-          <a href="{{ item.url | relative_url }}"{% if item.url == '/' %} class="site-name"{% endif %}{% if page.url == item.url %} aria-current="page"{% endif %}>
-            {{ item.title | escape }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
+  <div class="site-navigation">
+    <a class="site-brand" href="{{ '/' | relative_url }}">
+      <span>{{ site.title | escape }}</span>
+      <small>Tech Blog</small>
+    </a>
+    <a class="site-resume" href="{{ '/resume/' | relative_url }}"{% if page.url == '/resume/' %} aria-current="page"{% endif %}>Resume</a>
+  </div>
 </header>
