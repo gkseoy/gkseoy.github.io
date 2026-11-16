@@ -1,7 +1,6 @@
 ---
 layout: default
 description: "Seoyoung Yoon’s research in operating systems, storage systems, and memory for LLM-based agents."
-home_heading: "Computer Engineering & Systems Research"
 home_summary: "Research notes on operating systems, storage systems, and memory for LLM-based agents."
 ---
 

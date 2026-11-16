@@ -1,6 +1,6 @@
 ---
 layout: section-index
-title: "Resume"
+title: "CV"
 permalink: /resume/
 description: "Education, experience, and skills."
 ---
@@ -15,10 +15,15 @@ description: "Education, experience, and skills."
 
   .resume-grid dd {
     margin: 0;
+    font-size: calc(1em - 2pt);
   }
 
   .resume-grid dt {
     color: var(--muted-color);
+  }
+
+  .section-index > h3:not(:first-of-type) {
+    margin-block-start: 3.25rem;
   }
 
   @media (max-width: 600px) {

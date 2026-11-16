@@ -6,9 +6,8 @@
 
     <div class="container page-container">
       <main>
-        {% if page.home_heading %}
+        {% if page.home_summary %}
           <header class="blog-intro">
-            <h1>{{ page.home_heading | escape }}</h1>
             <p>{{ page.home_summary | escape }}</p>
           </header>
         {% endif %}
