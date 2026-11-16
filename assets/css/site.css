@@ -154,7 +154,7 @@ main h2 {
 
 /* 이름 아래 구분선을 내리고, 메뉴와 본문 사이를 좁힙니다. */
 .nav-list {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
 }
 
 .masthead {
