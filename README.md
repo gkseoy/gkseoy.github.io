@@ -1,4 +1,4 @@
-# Seoyoung's Blog
+# Seoyoung Yoon Blog
 
 Jekyll과 [Monophase](https://github.com/zivhub/monophase) 테마로 만든 개인 GitHub Pages 블로그입니다.
 
