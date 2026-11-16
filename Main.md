@@ -102,11 +102,7 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
 </dl>
 
 <dt>Scholarships</dt>
-<dd>
-  Munju Scholarship Foundation (Fall 2025)<br>
-  Beomeun Scholarship Foundation (Spring 2026)
-  Jongha Scholarship Association (Spring2026–Winter2027)<br>
-</dd>
+<dd> Munju Scholarship Foundation (Fall 2025)<br>Beomeun Scholarship Foundation (Spring 2026)<br>Jongha Scholarship Association (Spring2026–Winter2027)</dd>
 
 ### Selected Work & Credentials
 
