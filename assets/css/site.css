@@ -1,14 +1,14 @@
 :root {
- color-scheme: light;
---body-bg-color: #ffffff;
---body-color: #030920;
---heading-color: #030920;
+  color-scheme: light;
+  --body-bg-color: #ffffff;
+  --body-color: #030920;
+  --heading-color: #030920;
   --border-color: #2b405d;
   --code-bg-color: #101a33;
-  --link-color-rgb: 82, 199, 255;
+  --link-color-rgb: 0, 108, 166;
   --link-color: rgb(var(--link-color-rgb));
-  --link-hover-color: #a4e4ff;
-  --active-color: #a2ef62;
+  --link-hover-color: #005781;
+  --active-color: #2d781c;
   --highlight-color: #f294bd;
   --info-color: var(--active-color);
   --warning-color: #f8cd75;
@@ -25,12 +25,23 @@
   max-width: 70rem;
 }
 
+.masthead {
+  padding-bottom: 0;
+  margin-bottom: 3rem;
+}
+
+.masthead-title {
+  padding-top: 1pt;
+}
+
 .masthead-title > a {
   color: var(--link-color);
+  font-size: calc(1em + 4pt);
 }
 
 .masthead-title .tagline {
   color: var(--muted-color);
+  font-size: calc(80% - 3pt);
   opacity: 1;
 }
 
@@ -38,6 +49,7 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: clamp(0.75rem, 2vw, 1.4rem);
+  margin-top: 2.5rem;
 }
 
 .nav-list li {
@@ -89,6 +101,22 @@ main h1 {
 main h2 {
   font-size: clamp(1.4rem, 1.275rem + 0.42vw, 1.875rem);
   line-height: 1.35;
+}
+
+main > :is(h1, h2):first-child,
+main > .page > h1:first-child {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+}
+
+main > :is(h1, h2):first-child + p,
+main > .page > h1:first-child + p {
+  margin-bottom: 1.75rem;
+}
+
+main > :is(h1, h2):first-child + p + :is(h2, h3),
+main > .page > h1:first-child + p ~ h2:first-of-type {
+  margin-top: 0;
 }
 
 .post-meta {
@@ -143,39 +171,50 @@ main h2 {
   margin: 0;
 }
 
-/* 사이트 이름은 2pt 키우고, 태그라인은 2pt 줄입니다. */
-.masthead-title > a {
-  font-size: calc(1em + 4pt);
+/* Resume의 Education 및 Experience 타임라인 */
+.resume-grid.resume-timeline {
+  display: block;
+  --timeline-gap: 0.9rem;
 }
 
-.masthead-title .tagline {
-  font-size: calc(80% - 3pt);
+.resume-timeline .resume-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(9rem, 22%) minmax(0, 1fr);
+  gap: 0.3rem 1.5rem;
+  padding-left: 1.4rem;
 }
 
-/* 이름 아래 구분선을 내리고, 메뉴와 본문 사이를 좁힙니다. */
-.nav-list {
-  margin-top: 2.5rem;
+.resume-timeline .resume-row + .resume-row {
+  margin-top: var(--timeline-gap);
 }
 
-.masthead {
-  padding-bottom: 0;
-  margin-bottom: 3rem;
+.resume-timeline .resume-row::before,
+.resume-timeline .resume-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 0.825em;
+  left: 0.25rem;
 }
 
-/* 페이지 제목과 첫 문단 사이를 좁힙니다. */
-main > :is(h1, h2):first-child,
-main > .page > h1:first-child {
-  margin-top: 0;
-  margin-bottom: 0.6rem;
+.resume-timeline .resume-row::before {
+  z-index: 1;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--body-color);
+  transform: translate(-50%, -50%);
 }
 
-/* Email이나 소개 문단 뒤에 첫 섹션까지 여백을 둡니다. */
-main > :is(h1, h2):first-child + p,
-main > .page > h1:first-child + p {
-  margin-bottom: 1.75rem;
+.resume-timeline .resume-row:not(:last-child)::after {
+  width: 1px;
+  height: calc(100% + var(--timeline-gap));
+  background: #94a3b8;
+  transform: translateX(-50%);
 }
 
-main > :is(h1, h2):first-child + p + :is(h2, h3),
-main > .page > h1:first-child + p ~ h2:first-of-type {
-  margin-top: 0;
+@media (max-width: 600px) {
+  .resume-timeline .resume-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
