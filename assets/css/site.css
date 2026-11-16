@@ -146,21 +146,21 @@ main h2 {
 
 /* 사이트 이름은 2pt 키우고, 태그라인은 2pt 줄입니다. */
 .masthead-title > a {
-  font-size: calc(1em + 2pt);
+  font-size: calc(1em + 4pt);
 }
 
 .masthead-title .tagline {
-  font-size: calc(80% - 2pt);
+  font-size: calc(80% - 4pt);
 }
 
 /* 이름 아래 구분선을 내리고, 메뉴와 본문 사이를 좁힙니다. */
 .nav-list {
-  margin-top: 1.5rem;
+  margin-top: 3rem;
 }
 
 .masthead {
   padding-bottom: 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 /* 페이지 제목과 첫 문단 사이를 좁힙니다. */
