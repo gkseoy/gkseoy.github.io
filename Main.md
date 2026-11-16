@@ -1,11 +1,9 @@
 ---
-layout: page
+layout: section-index
 title: "Resume"
 permalink: /resume/
 description: "Education, experience, and skills."
 ---
-
-Email · [{{ site.email }}](mailto:{{ site.email }})
 
 <style>
   .resume-grid {
@@ -90,32 +88,43 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
 
 ### Skills
 
-<dl class="resume-grid">
-  <dt>GPA</dt>
-  <dd>XX (major GPA XX)</dd>
+<dl class="resume-grid resume-timeline">
+  <div class="resume-row">
+    <dt>GPA</dt>
+    <dd>XX (major GPA XX)</dd>
+  </div>
 
-  <dt>Languages</dt>
-  <dd>OPIc AL (August 28)<br>TOEIC XXX (XX XX)</dd>
+  <div class="resume-row">
+    <dt>Languages</dt>
+    <dd>OPIc AL (August 28)<br>TOEIC XXX (XX XX)</dd>
+  </div>
 
-  <dt>Certifications</dt>
-  <dd>SQLD (XX)<br>Linux Master Level 2 (XX)</dd>
+  <div class="resume-row">
+    <dt>Certifications</dt>
+    <dd>SQLD (XX)<br>Linux Master Level 2 (XX)</dd>
+  </div>
+
+  <div class="resume-row">
+    <dt>Scholarships</dt>
+    <dd>
+      Munju Scholarship Foundation (Fall 2025)<br>
+      Beomeun Scholarship Foundation (Spring 2026)<br>
+      Jongha Scholarship Association (Spring 2026–Winter 2027)
+    </dd>
+  </div>
 </dl>
-
-<dt>Scholarships</dt>
-<dd> Munju Scholarship Foundation (Fall 2025)<br>Beomeun Scholarship Foundation (Spring 2026)<br>Jongha Scholarship Association (Spring2026–Winter2027)</dd>
 
 ### Selected Work & Credentials
 
-<ul class="document-list">
+<ul class="document-list resume-timeline resume-work" role="list">
 {% for resource in site.data.resume_resources %}
   {% assign resource_url = resource.url %}
   {% assign resource_path_prefix = resource_url | slice: 0, 1 %}
   {% if resource_path_prefix == '/' %}
     {% assign resource_url = resource_url | relative_url %}
   {% endif %}
-  <li>
+  <li class="resume-row">
     <a class="document-link" href="{{ resource_url | escape }}">
-      <span class="document-icon" aria-hidden="true"></span>
       <span class="document-title">{{ resource.title | escape }}</span>
       {% if resource.type %}<span class="document-meta">{{ resource.type | escape }}</span>{% endif %}
     </a>

@@ -1,9 +1,8 @@
 ---
-layout: page
-title: "Seminar"
+layout: section-index
+title: "Seminars"
 permalink: /seminars/
-description: "연구 세미나와 발표를 들으며 정리한 기록"
-lang: ko
+description: "Notes from research seminars and talks."
 ---
 
-{% include document-list.html collection="seminars" empty_message="아직 올라온 세미나 기록이 없습니다." %}
+{% include document-list.html collection="seminars" empty_message="No seminar notes have been published yet." %}
