@@ -43,28 +43,36 @@ Email · [{{ site.email }}](mailto:{{ site.email }})
 
 ### Education
 
-<dl class="resume-grid">
-  <dt>2024 – Present</dt>
-  <dd>
-    <strong>Dongguk University</strong><br>
-    Department of Computer Engineering<br>
-    Expected graduation in February 2028<br>
-    <em>Research interests include operating systems, storage systems,
-    AI agents, and memory management for LLM-based agents.</em>
-  </dd>
+<dl class="resume-grid resume-timeline">
+  <div class="resume-row">
+    <dt>2024 – Present</dt>
+    <dd>
+      <strong>Dongguk University</strong><br>
+      Department of Computer Engineering<br>
+      Expected graduation in February 2028<br>
+      <em>Research interests include operating systems, storage systems,
+      AI agents, and memory management for LLM-based agents.</em>
+    </dd>
+  </div>
 
-  <dt>2023</dt>
-  <dd>Sookmyung Girls' High School</dd>
+  <div class="resume-row">
+    <dt>2023</dt>
+    <dd>Sookmyung Girls' High School</dd>
+  </div>
 </dl>
 
 ### Experience
 
-<dl class="resume-grid">
-  <dt>Feb 2026 – Present</dt>
-  <dd>Undergraduate Research Intern at <em>NOSLab (Prof. DongHyun Kang)</em></dd>
+<dl class="resume-grid resume-timeline">
+  <div class="resume-row">
+    <dt>Feb 2026 – Present</dt>
+    <dd>Undergraduate Research Intern at <em>NOSLab (Prof. DongHyun Kang)</em></dd>
+  </div>
 
-  <dt>Jan 2024 – Present</dt>
-  <dd>Various part-time jobs</dd>
+  <div class="resume-row">
+    <dt>Jan 2024 – Present</dt>
+    <dd>Various part-time jobs</dd>
+  </div>
 </dl>
 
 ### Skills
