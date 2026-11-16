@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "세미나"
+title: "Seminar"
 permalink: /seminars/
 description: "연구 세미나와 발표를 들으며 정리한 기록"
 lang: ko
