@@ -1,54 +1,55 @@
 ---
 layout: post
-title: "논문 제목"
+title: "Paper Title"
 categories:
   - paper-review
 tags:
-  - 분야
+  - topic
+# Add lang: ko if the review is written in Korean.
 ---
 
-> 이 파일을 복사해 `_posts/YYYY-MM-DD-영문-제목.md` 형식으로 저장한 뒤 내용을 작성하세요.
+<!-- Save a copy in _posts as YYYY-MM-DD-paper-title.md to publish it. -->
 
-## 논문 정보
+## Paper Details
 
-- **제목:**
-- **저자:**
-- **학회 / 저널:**
-- **발행 연도:**
-- **링크:**
+- **Title**
+- **Authors**
+- **Conference or journal**
+- **Year**
+- **Link**
 
-## 한 줄 요약
+## One-Sentence Summary
 
-이 논문의 핵심을 한 문장으로 정리합니다.
+Summarize the paper's main contribution in one sentence.
 
-## 읽게 된 이유
+## Why I Read This Paper
 
-이 논문을 선택한 계기와 알고 싶었던 내용을 적습니다.
+Describe what drew you to the paper and what you wanted to learn.
 
-## 문제 정의
+## Problem
 
-논문이 해결하려는 문제와 기존 접근의 한계를 정리합니다.
+Explain the problem and the limitations of earlier approaches.
 
-## 핵심 아이디어
+## Key Idea
 
-제안한 방법의 핵심 아이디어를 자신의 말로 설명합니다.
+Describe the main idea in your own words.
 
-## 방법
+## Method
 
-모델 구조, 알고리즘, 학습 방법 등 중요한 세부 내용을 정리합니다.
+Explain the important details of the proposed method.
 
-## 실험과 결과
+## Experiments and Results
 
-데이터셋, 평가 지표, 비교 대상과 주요 결과를 정리합니다.
+Summarize the datasets, metrics, baselines, and key results.
 
-## 인상 깊었던 점
+## What Stood Out
 
-새롭게 배운 점이나 특히 좋았던 부분을 적습니다.
+Note what you learned or found interesting.
 
-## 한계와 질문
+## Limitations and Open Questions
 
-논문의 한계, 읽으며 생긴 의문, 후속으로 확인할 내용을 적습니다.
+Discuss limitations, open questions, and what you would investigate next.
 
-## 내 생각
+## My Take
 
-다른 연구나 프로젝트에 어떻게 연결할 수 있을지 자유롭게 기록합니다.
+Describe how these ideas apply to your own research or projects.

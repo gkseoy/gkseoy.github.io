@@ -1,14 +1,14 @@
 ---
 layout: default
-description: "Seoyoung의 이력과 논문 리뷰를 모아 둔 개인 블로그입니다."
+description: "Seoyoung Yoon's resume and paper reviews."
 ---
 
-# 배우고, 만들고, 기록합니다.
+# Learning, building, and writing.
 
-컴퓨터공학을 공부하며 쌓아 온 경험과 프로젝트, 그리고 읽은 논문에서 배운 내용을 정리하는 공간입니다.
+I write about what I learn in computer engineering, the projects I work on, and the papers I read.
 
-## 최근 논문 리뷰
+## Recent Paper Reviews
 
-{% include review-list.html limit=3 empty_message="첫 번째 논문 리뷰를 준비 중입니다." %}
+{% include review-list.html limit=3 empty_message="The first paper review is coming soon." %}
 
-[리뷰 전체 보기]({{ '/paper-reviews/' | relative_url }})
+[Browse all paper reviews]({{ '/paper-reviews/' | relative_url }})

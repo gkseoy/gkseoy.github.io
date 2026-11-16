@@ -1,10 +1,10 @@
 ---
 layout: page
-title: "논문 리뷰"
+title: "Paper Reviews"
 permalink: /paper-reviews/
-description: "읽은 논문의 핵심 아이디어와 생각을 정리한 리뷰"
+description: "Notes on the problems, ideas, and results in the papers I read."
 ---
 
-읽은 논문의 문제의식, 핵심 아이디어, 실험 결과와 제 생각을 기록합니다.
+I summarize each paper's motivation, main ideas, and results, and share what I took away from it.
 
-{% include review-list.html empty_message="아직 등록된 논문 리뷰가 없습니다." %}
+{% include review-list.html empty_message="No paper reviews have been published yet." %}

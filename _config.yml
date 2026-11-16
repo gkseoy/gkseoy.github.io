@@ -1,10 +1,10 @@
 title: "Seoyoung Yoon"
 tagline: "git blog"
-description: "컴퓨터공학을 공부하며 배운 것과 읽은 논문을 기록합니다."
+description: "Notes on computer engineering, projects, and research papers."
 email: "zxwmqxx@gmail.com"
 url: "https://gkseoy.github.io"
 baseurl: ""
-lang: ko
+lang: en
 date_format: "%Y-%m-%d"
 
 author:
