@@ -1,9 +1,8 @@
 :root {
-  color-scheme: dark;
-  --body-bg-color: #030920;
-  --body-color: #d6e0f5;
-  --heading-color: #eff5ff;
-  --muted-color: #a0b0cc;
+ color-scheme: light;
+--body-bg-color: #ffffff;
+--body-color: #030920;
+--heading-color: #030920;
   --border-color: #2b405d;
   --code-bg-color: #101a33;
   --link-color-rgb: 82, 199, 255;
