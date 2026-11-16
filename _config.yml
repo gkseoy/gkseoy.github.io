@@ -1,5 +1,5 @@
-title: "Seoyoung"
-tagline: "컴퓨터공학 학습 기록"
+title: "Seoyoung Yoon"
+tagline: "git blog"
 description: "컴퓨터공학을 공부하며 배운 것과 읽은 논문을 기록합니다."
 email: "zxwmqxx@gmail.com"
 url: "https://gkseoy.github.io"
@@ -8,7 +8,7 @@ lang: ko
 date_format: "%Y-%m-%d"
 
 author:
-  name: "Seoyoung"
+  name: "Seoyoung Yoon"
   url: "https://github.com/gkseoy"
 
 remote_theme: zivhub/monophase@085334c67f4e23be3b93c79fbbcedb09a492c5aa
