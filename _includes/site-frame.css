@@ -1,7 +1,7 @@
 @font-face {
-  font-family: "Cormorant Garamond";
+  font-family: Arial, sans-serif;
   src: url("{{ '/assets/fonts/cormorant-garamond-semibold-italic.ttf' | relative_url }}") format("truetype");
-  font-style: italic;
+  font-style: normal;
   font-weight: 600;
   font-display: swap;
 }
