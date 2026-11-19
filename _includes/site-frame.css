@@ -189,7 +189,7 @@
   padding: 0;
   border: 0;
   border-radius: 0.4rem;
-  background: transparent;
+  background: #fff;
   color: var(--portfolio-text-muted);
   font-family: inherit;
   font-size: 0.9375rem;
@@ -199,13 +199,13 @@
 
 .feed-pagination button:hover,
 .feed-pagination button:focus-visible {
-  background: var(--portfolio-tint);
+  background: #fff;
   color: var(--portfolio-accent);
 }
 
 .feed-pagination button[aria-current="page"] {
-  background: var(--portfolio-accent);
-  color: #fff;
+  background: #eef0f3;
+  color: var(--portfolio-navy);
   cursor: default;
 }
 
