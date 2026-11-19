@@ -1,27 +1,11 @@
 {% include section-documents.html collection=include.collection %}
 {% if section_documents.size > 0 %}
   {% assign document_limit = include.limit | default: section_documents.size %}
-  <ul class="document-list{% if page.document_list_style == 'notion' %} document-list--notion{% endif %}"{% if page.document_list_style == 'notion' %} role="list"{% endif %}>
+  <section class="post-feed post-feed--text" aria-label="{{ page.title | escape }}">
     {% for entry in section_documents limit: document_limit %}
-      <li>
-        <a class="document-link" href="{{ entry.url | relative_url }}">
-          {% if page.document_list_style == 'notion' %}
-            <svg class="notion-document-icon" viewBox="0 0 16 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <path d="M3.5 1.2h5.3l5 5v9.1a1.5 1.5 0 0 1-1.5 1.5H3.5A1.5 1.5 0 0 1 2 15.3V2.7a1.5 1.5 0 0 1 1.5-1.5Z M8.8 1.2v4a1 1 0 0 0 1 1h4 M5 10h5.7 M5 13h5.7" />
-            </svg>
-          {% else %}
-            <span class="document-icon" aria-hidden="true"></span>
-          {% endif %}
-          <span class="document-title">{{ entry.title | escape }}</span>
-          {% if page.document_list_style == 'notion' %}
-            <time class="document-meta" lang="ko" datetime="{{ entry.date | date: '%Y-%m-%d' }}">{{ entry.date | date: '%Y년 %-m월 %-d일' }}</time>
-          {% else %}
-            <time class="document-meta" datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: site.date_format }}</time>
-          {% endif %}
-        </a>
-      </li>
+      {% include feed-entry.html entry=entry show_thumbnail=false %}
     {% endfor %}
-  </ul>
+  </section>
 {% else %}
   <p>{{ include.empty_message | escape }}</p>
 {% endif %}

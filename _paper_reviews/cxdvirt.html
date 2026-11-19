@@ -1,0 +1,148 @@
+---
+title: "[PMBS’26] CXDVIRT: Low Latency Kernel Module Based CXL-SSD Emulation"
+date: 2026-11-19 09:00:00 +0900
+lang: ko
+description: "VM 실행 오버헤드를 제거하고, 커널의 페이지 폴트로 CXL-SSD의 NAND 지연을 재현하는 CXDVIRT를 정리합니다."
+thumbnail: /assets/conferences/pmbs26.png
+thumbnail_alt: "SC26 official logo, as featured on the PMBS26 workshop website"
+thumbnail_source: "https://pmbs-workshop.github.io/"
+image: /assets/conferences/pmbs26.png
+---
+
+<p><strong>Authors</strong> · Hyunsun Chung, Seongho Bong, Hong-Yeon Kim, Youngjae Kim<br>
+<strong>Venue</strong> · PMBS 2026, held in conjunction with SC26</p>
+<p><a href="https://arxiv.org/abs/2610.08899">Paper</a> · <a href="https://github.com/hschung1652/cxdvirt">Code</a> · <a href="https://app.notion.com/p/PMBS-26-CXDVIRT-Low-Latency-Kernel-Module-Based-CXL-SSD-Emulation-OK-41343157cdae801c995eed845e1b8086">Notion notes</a></p>
+<blockquote>호스트 OS에서 애플리케이션을 직접 실행하고, 캐시 미스가 발생할 때 커널의 페이지 폴트 경로에서 NAND 지연을 부여하는 CXL-SSD 에뮬레이터입니다.</blockquote>
+<p>아래 내용과 그림은 논문 원문(arXiv:2610.08899v1)을 바탕으로 정리했습니다.</p>
+
+<nav aria-label="Review contents">
+  <ul>
+    <li><a href="#introduction">1. Introduction</a></li>
+    <li><a href="#motivation">2. Background and Motivation</a></li>
+    <li><a href="#design">3. CXDVIRT</a></li>
+    <li><a href="#evaluation">4. Evaluation</a></li>
+    <li><a href="#discussion">5. Discussion</a></li>
+  </ul>
+</nav>
+
+<h2 id="introduction">1. Introduction</h2>
+<p>CXL-SSD는 작은 DRAM 캐시와 대용량 NAND를 결합하고, CPU가 일반 메모리처럼 load/store 명령으로 접근할 수 있도록 하는 장치입니다. DRAM에 데이터가 있으면 빠르게 접근하지만, 없으면 NAND에서 데이터를 가져오는 지연이 발생합니다.</p>
+<p>실제 장치를 구하기 어려워 새로운 설계와 정책을 평가할 에뮬레이터가 필요합니다. 이때 중요한 것은 단순히 실행 결과를 얻는 것이 아니라, <strong>설정한 장치의 지연을 애플리케이션이 얼마나 정확하게 경험하느냐</strong>입니다.</p>
+
+<h2 id="motivation">2. Background and Motivation</h2>
+<h3>Cylon의 VM 실행 경로가 만드는 추가 지연</h3>
+<p>기존 에뮬레이터인 Cylon은 QEMU/KVM 기반 VM에서 워크로드를 실행합니다. DRAM 미스가 발생하면 메모리 접근을 가로채 NAND 지연을 부여하는데, 이 과정에 VM exit/entry와 QEMU 처리가 추가됩니다.</p>
+<ul>
+  <li><strong>KVM:</strong> EPT 처리, ioctl, MMIO 등 VM을 나가고 다시 들어오는 커널 실행 비용.</li>
+  <li><strong>QEMU:</strong> 전역 잠금(BQL), 메모리 토폴로지 탐색과 복사 등의 비용.</li>
+  <li><strong>Multi-exit refault:</strong> NAND 대기와 EPT 갱신이 맞물리지 않으면 같은 load가 다시 VM exit를 발생시킵니다.</li>
+  <li><strong>Re-entry gap:</strong> VM으로 재진입하고 명령을 재실행하기까지의 간격도 누적됩니다.</li>
+</ul>
+<p>논문에서는 KVM/QEMU 처리만으로도 3µs를 넘는 추가 지연이 발생한다고 분석합니다. NAND 자체가 빠를수록 에뮬레이터의 실행 비용이 측정 결과에 큰 영향을 주며, 반복되는 VM exit는 꼬리 지연을 확대합니다.</p>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-01.png' | relative_url }}" alt="Cylon의 NAND 설정별 DRAM 미스 지연 구성" loading="lazy">
+  <figcaption>Figure 1. Cylon의 미스 지연을 NAND·채널 전송·KVM·QEMU·반복 VM exit 등으로 분해합니다. 높은 백분위수에서는 VM 관련 대기 비용이 크게 증가합니다.</figcaption>
+</figure>
+
+<h2 id="design">3. CXDVIRT</h2>
+<h3>3.1. 장치 등록과 CXL-SSD 동작 모델</h3>
+<p>CXDVIRT는 VM 대신 호스트의 커널 모듈로 동작합니다. 커널이 장치를 CXL 메모리로 인식하도록 CXL endpoint, PCIe BAR, MSI-X table, CXL 레지스터 등의 장치 정보를 구성합니다.</p>
+<p>이 정보는 <strong>장치를 등록하고 제어하기 위한 가상 장치 구성</strong>입니다. 애플리케이션이 게스트 OS 안에서 실행된다는 뜻은 아닙니다. CXL-SSD의 동작은 NAND 성능 모델, 페이지 메타데이터, eviction 정책과 prefetch 정책으로 재현합니다.</p>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-02.png' | relative_url }}" alt="가상 CXL 장치 구성과 CXL-SSD 관리 구성요소" loading="lazy">
+  <figcaption>Figure 2. 위쪽은 OS가 장치를 CXL 메모리로 인식하는 데 필요한 구성요소, 아래쪽은 페이지와 NAND 지연 및 교체·프리페치 정책을 관리하는 구성요소입니다.</figcaption>
+</figure>
+<p>각 페이지는 상태, dirty bit, CLOCK bit, pin count, FIFO/LIFO 순서, wait queue 등의 메타데이터를 가집니다. 96GiB 장치에서 페이지 엔트리와 비트맵에 필요한 공간은 총 약 1,105.6MiB이며, 애플리케이션에 제공하는 메모리와 별도로 예약합니다(Table I).</p>
+
+<h3>3.2. DRAM hit와 miss의 실행 흐름</h3>
+<ol>
+  <li>애플리케이션은 <strong>devdax</strong>로 노출된 장치의 매핑 영역에 접근합니다.</li>
+  <li><strong>DRAM hit:</strong> 유효한 PTE가 있으면 MMU를 통해 직접 접근합니다. NAND 지연을 부여하는 처리 경로에 진입하지 않습니다.</li>
+  <li><strong>DRAM miss:</strong> 사용자 정의 페이지 폴트 핸들러로 진입하고, NAND 성능 모델이 계산한 지연만큼 기다립니다.</li>
+  <li>처리가 끝나면 PTE를 설치합니다. 이후 같은 페이지 접근은 다시 MMU의 직접 접근 경로를 사용합니다.</li>
+</ol>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-03.png' | relative_url }}" alt="devdax, MMU, 페이지 폴트, NAND 성능 모델의 실행 흐름" loading="lazy">
+  <figcaption>Figure 3. Hit는 MMU를 통해 바로 처리하고, miss만 페이지 폴트 경로에서 NAND 지연을 부여한 뒤 매핑을 갱신합니다.</figcaption>
+</figure>
+
+<h3>3.3. DRAM↔NAND 이동을 memcpy 없이 표현하는 방법</h3>
+<p>실제 데이터는 예약한 물리 메모리에 보관합니다. 이 공간을 고정된 DRAM 구역과 NAND 구역으로 나누어 데이터를 복사하는 대신, <strong>페이지 매핑과 상태로 어느 계층에 있는지를 표현</strong>합니다.</p>
+<ul>
+  <li><strong>DRAM → NAND:</strong> PTE를 제거해 다음 접근이 페이지 폴트를 일으키도록 합니다. Dirty 페이지에만 NAND 쓰기를 모델링합니다.</li>
+  <li><strong>NAND → DRAM:</strong> NAND 읽기 지연을 부여한 후 PTE를 설치해 직접 접근을 허용합니다.</li>
+</ul>
+<p>따라서 두 물리 버퍼 사이의 memcpy 비용을 추가하지 않고 캐시 교체와 재적재를 표현할 수 있습니다. 실제 NAND로 데이터를 복사하는 것이 아니라 접근 가능 여부와 지연을 재현하는 것입니다.</p>
+
+<h3>3.4. 페이지 상태와 동시성</h3>
+<table>
+  <thead><tr><th>상태</th><th>의미</th></tr></thead>
+  <tbody>
+    <tr><td>NOT_CACHED</td><td>캐시에 없으며 접근 시 NAND 읽기가 필요합니다.</td></tr>
+    <tr><td>LOADING</td><td>NAND 읽기 지연을 부여하며 페이지를 적재 중입니다.</td></tr>
+    <tr><td>CACHED</td><td>DRAM 캐시에 있으며 PTE를 통해 직접 접근할 수 있습니다.</td></tr>
+    <tr><td>EVICTING</td><td>PTE를 제거하고, dirty 페이지라면 NAND 쓰기를 처리 중입니다.</td></tr>
+  </tbody>
+</table>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-04.png' | relative_url }}" alt="NOT_CACHED, LOADING, CACHED, EVICTING 상태 전이" loading="lazy">
+  <figcaption>Figure 4. 적재와 퇴출을 상태 전이로 관리합니다. 동일 페이지의 처리 중복을 막고, pin 상태나 매핑 제거 실패에 따라 퇴출을 취소할 수 있습니다.</figcaption>
+</figure>
+<p>상태 변경은 페이지별 atomic compare-and-swap으로 확보합니다. NAND 지연을 기다리는 동안 장치 전체의 잠금을 잡지 않아 서로 다른 페이지의 miss가 병렬로 진행될 수 있습니다. 같은 페이지가 LOADING/EVICTING이면 wait queue에서 기다리고, pin count는 PTE 설치 도중 퇴출되는 상황을 막습니다.</p>
+
+<h2 id="evaluation">4. Evaluation</h2>
+<h3>4.1. 실험 환경</h3>
+<p>NVMeVirt를 수정해 PCI 장치 생성과 NAND 성능 모델을 활용하고, CXL 장치 노출 및 페이지 테이블 조작을 위한 커널 기능을 추가했습니다. Remote NUMA node의 물리 메모리 96GiB로 장치를 재현하며 기본 DRAM 캐시 크기는 4.8GiB입니다.</p>
+<table>
+  <thead><tr><th>항목</th><th>설정</th></tr></thead>
+  <tbody>
+    <tr><td>CPU</td><td>Dual Xeon Gold 5218R, 40 cores / 80 threads</td></tr>
+    <tr><td>NAND 모델</td><td>Z-NAND SLC, 8 channels × 16 ways</td></tr>
+    <tr><td>읽기 / 쓰기 / 지우기</td><td>3 / 100 / 1,000µs</td></tr>
+    <tr><td>Cylon 실행 환경</td><td>Ubuntu 22.04.5, Linux 6.4.6, VM 8 vCPUs</td></tr>
+    <tr><td>CXDVIRT 실행 환경</td><td>Ubuntu 20.04.6, Linux 6.18.5, host 실행</td></tr>
+    <tr><td>워크로드</td><td>MIO pointer chasing, Splash-4 OCEAN, Redis YCSB-C</td></tr>
+  </tbody>
+</table>
+<p><strong>WSS 비율</strong>은 working set size를 DRAM 캐시 용량으로 나눈 값입니다. 1보다 크면 전체 데이터가 캐시에 들어가지 않습니다.</p>
+
+<h3>4.2. 메모리 접근 지연과 스레드 확장성</h3>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-05.png' | relative_url }}" alt="단일 스레드와 8스레드에서 pointer chasing 지연 CDF 및 CCDF" loading="lazy">
+  <figcaption>Figure 5. 두 에뮬레이터 모두 hit와 miss의 두 지연 구간을 재현하지만, CXDVIRT의 miss 지연이 설정값에 더 가깝습니다. 8스레드에서 Cylon의 긴 꼬리 지연과 전역 잠금의 영향이 커집니다.</figcaption>
+</figure>
+<p>단일 스레드에서 CXDVIRT의 miss는 약 8–9µs, Cylon은 약 10–12µs에 위치합니다. 8스레드로 늘리면 평균 miss 지연은 CXDVIRT에서 단일 스레드 대비 약 1.9–2.0배, Cylon에서 약 8.0–9.2배가 됩니다.</p>
+<p>Cylon의 random 접근 CDF 일부가 앞서 보이는 현상은 더 빠른 miss 처리 때문이 아닙니다. 전역 잠금을 보유한 vCPU가 연속해서 진행하고 다른 vCPU가 기다리면서 스레드 간 진행과 캐시 적중률이 불균등해지는 결과로 분석합니다.</p>
+
+<h3>4.3. DRAM miss 지연 분해</h3>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-06.png' | relative_url }}" alt="Cylon과 CXDVIRT의 백분위별 DRAM miss 지연 비교" loading="lazy">
+  <figcaption>Figure 6. VM 관련 비용을 제거하면서 P50–P99 miss 지연은 약 1.4–1.6배, P99.9는 약 4.1배 감소합니다.</figcaption>
+</figure>
+<p>설정한 NAND 읽기와 4KiB 채널 전송을 합친 지연은 6.2µs입니다. 관측한 P50은 Cylon 11.5µs, CXDVIRT 8.2µs이며, P99.9는 각각 43.4µs와 10.5µs입니다. CXDVIRT에도 페이지 폴트 등 에뮬레이션 비용이 남지만 VM 관련 비용은 제거됩니다.</p>
+
+<h3>4.4. 실제 애플리케이션</h3>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-07.png' | relative_url }}" alt="OCEAN 실행 시간과 Redis YCSB-C 읽기 지연 비교" loading="lazy">
+  <figcaption>Figure 7. (a) 쓰기 중심 OCEAN의 실행 시간, (b) 읽기 중심 Redis YCSB-C의 평균·P99 지연입니다. WSS 비율을 바꾸어 캐시 용량의 영향을 비교합니다.</figcaption>
+</figure>
+<p>OCEAN에서는 Cylon 대비 실행 시간이 약 3.06–3.51배 감소합니다. NAND 접근이 없는 0.35 WSS에서 CXDVIRT는 remote DRAM 기준 대비 5% 이내에 머물지만, Cylon은 약 3.6배 느립니다. Redis도 0.35 WSS에서 remote DRAM과 유사한 지연을 보이며, Cylon은 약 3.1배 느립니다.</p>
+
+<h3>4.5. Eviction과 prefetch 정책 연구</h3>
+<figure>
+  <img src="{{ '/assets/paper-reviews/cxdvirt/figure-08.png' | relative_url }}" alt="FIFO, CLOCK, LIFO와 next-N prefetch 정책 비교" loading="lazy">
+  <figcaption>Figure 8. (a) FIFO/CLOCK/LIFO의 지연과 퇴출 수, (b) prefetch 정도별 지연, (c) 실제 사용된 prefetch 비율, (d) 실행 시간과 dirty writeback stall을 비교합니다.</figcaption>
+</figure>
+<ul>
+  <li><strong>Eviction:</strong> 이 Redis 실험에서 FIFO와 CLOCK은 유사하며, LIFO는 읽기 지연 중앙값이 약 1.8–1.9배 높습니다. Dirty writeback 증가보다는 clean 페이지의 반복 퇴출·재적재가 주원인입니다.</li>
+  <li><strong>Prefetch:</strong> Next-N prefetch의 N을 늘리면 기본 설정에서 지연이 증가합니다. 제때 도착해 사용되는 prefetch가 10% 미만이라 불필요한 적재와 퇴출이 늘어납니다.</li>
+  <li><strong>예외의 원인:</strong> 백그라운드 퇴출이 느린 조건에서 일부 꼬리 지연이 줄어드는 것은 적중률 향상 때문이 아닙니다. Clean prefetch 페이지를 희생자로 선택하면서 dirty writeback 대기가 줄어든 결과입니다.</li>
+</ul>
+
+<h2 id="discussion">5. Discussion</h2>
+<p>핵심 기여는 <strong>장치의 실제 지연과 에뮬레이터 자체의 실행 비용을 더 잘 구분할 수 있게 했다는 점</strong>입니다. VM 없이 일반 애플리케이션을 실행하면서 교체·프리페치 정책을 비교하고, 결과가 바뀐 이유까지 분석할 수 있습니다.</p>
+<p>한편 실제 CXL 링크의 특성은 remote NUMA 메모리로 근사합니다. 따라서 실제 하드웨어의 모든 동작을 그대로 재현한다고 볼 수는 없습니다. 논문은 실제 CXL 메모리를 backing medium으로 사용하면서 miss에 NAND 지연을 추가하는 구성을 향후 연구로 제시합니다.</p>
+<p><strong>읽으며 정리한 관점:</strong> “VM을 사용하지 않는다”는 말은 가상 장치 모델을 없앴다는 뜻이 아니라, 워크로드 실행에 게스트 OS와 QEMU/KVM이 필요하지 않다는 뜻으로 이해할 수 있습니다.</p>
+
+<hr>
+<p><small>Figures 1–8 © the paper’s authors. Source: <a href="https://arxiv.org/abs/2610.08899">CXDVIRT, arXiv:2610.08899v1</a>. Review written from the paper; the linked Notion page is provided separately.</small></p>

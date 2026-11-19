@@ -1,36 +1,13 @@
 {% assign feed_entries = '' | split: ',' %}
-{% assign feed_collections = 'paper_reviews,event_notes,seminars' | split: ',' %}
+{% assign feed_collections = 'paper_reviews,seminars,event_notes' | split: ',' %}
 {% for collection in feed_collections %}
   {% include section-documents.html collection=collection %}
   {% assign feed_entries = feed_entries | concat: section_documents %}
 {% endfor %}
 {% assign feed_entries = feed_entries | sort: 'date' | reverse %}
-
 <section class="post-feed" aria-label="Recent posts">
   {% for entry in feed_entries %}
-    {% assign section_url = entry.collection | replace: '_', '-' | prepend: '/' | append: '/' %}
-    {% assign navigation_item = site.data.navigation | where: 'url', section_url | first %}
-    <article class="feed-post">
-      <a class="feed-link" href="{{ entry.url | relative_url }}" aria-labelledby="feed-post-{{ forloop.index }}">
-        {% if entry.thumbnail %}
-          <span class="feed-thumbnail">
-            <img src="{{ entry.thumbnail | relative_url | escape }}" alt="" width="136" height="136">
-          </span>
-        {% endif %}
-        <div class="feed-text">
-          <h2 id="feed-post-{{ forloop.index }}">{{ entry.title | escape }}</h2>
-          {% if entry.description %}
-            <p{% if entry.lang %} lang="{{ entry.lang | escape }}"{% endif %}>{{ entry.description | escape }}</p>
-          {% endif %}
-          <div class="feed-meta">
-            {% if navigation_item %}<span class="feed-category">{{ navigation_item.title | escape }}</span>{% endif %}
-            <span>{{ entry.author | default: site.author.name | escape }}</span>
-            <span aria-hidden="true">·</span>
-            <time datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: '%B %-d, %Y' }}</time>
-          </div>
-        </div>
-      </a>
-    </article>
+    {% include feed-entry.html entry=entry show_thumbnail=true %}
   {% else %}
     <p>No posts have been published yet.</p>
   {% endfor %}

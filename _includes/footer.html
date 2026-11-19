@@ -3,13 +3,15 @@
     <p>
       <small>
         &copy;&nbsp;
-        {%- assign date_from = site.posts[-1].date | date_to_xmlschema -%}
-        {%- assign year_from = date_from | date: '%Y' -%}
-        {%- assign date_to   = site.time | date_to_xmlschema -%}
-        {%- assign year_to   = date_to | date: '%Y' -%}
-        {%- unless year_from == nil or year_from == year_to -%}
-          <time datetime="{{ date_from }}">{{ year_from }}</time>-
-        {%- endunless -%}
+        {%- assign date_to = site.time | date_to_xmlschema -%}
+        {%- assign year_to = site.time | date: '%Y' -%}
+        {%- assign first_post = site.posts | last -%}
+        {%- if first_post -%}
+          {%- assign year_from = first_post.date | date: '%Y' -%}
+          {%- unless year_from == year_to -%}
+            <time datetime="{{ first_post.date | date_to_xmlschema }}">{{ year_from }}</time>-
+          {%- endunless -%}
+        {%- endif -%}
         <time datetime="{{ date_to }}">{{ year_to }}</time>
         {%- if site.author -%}
           &nbsp;<a href="{{ site.author.url }}" target="_blank">{{ site.author.name }}</a>
