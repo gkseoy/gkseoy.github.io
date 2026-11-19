@@ -1,11 +1,9 @@
-<nav class="section-tabs" aria-label="Blog sections">
+<div class="section-tabs" role="group" aria-label="Filter posts" data-post-filters>
+  <button type="button" data-feed-filter="all" aria-pressed="true" aria-controls="post-feed">All</button>
   {% for item in site.data.navigation %}
-    {% unless item.url == '/resume/' %}
-      {% assign section_url_length = item.url | size %}
-      {% assign section_prefix = page.url | slice: 0, section_url_length %}
-      <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% elsif item.url != '/' and section_prefix == item.url %} aria-current="location"{% endif %}>
-        {% if item.url == '/' %}All{% else %}{{ item.title | escape }}{% endif %}
-      </a>
+    {% unless item.url == '/' or item.url == '/resume/' %}
+      {% assign filter_key = item.url | replace: '/', '' %}
+      <button type="button" data-feed-filter="{{ filter_key | escape }}" aria-pressed="false" aria-controls="post-feed">{{ item.title | escape }}</button>
     {% endunless %}
   {% endfor %}
-</nav>
+</div>

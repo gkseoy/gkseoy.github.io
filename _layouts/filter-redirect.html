@@ -1,0 +1,10 @@
+---
+layout: default
+---
+{% capture filter_target %}{{ '/' | relative_url }}#{{ page.filter | url_encode }}{% endcapture %}
+<article class="page section-index" aria-label="{{ page.title | escape }}">
+  <p>This section is now part of the main page. <a href="{{ filter_target }}">View {{ page.title | escape }}</a>.</p>
+</article>
+<script>
+  window.location.replace({{ filter_target | jsonify }});
+</script>

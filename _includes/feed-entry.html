@@ -1,7 +1,8 @@
 {% assign entry = include.entry %}
 {% assign section_url = entry.collection | replace: '_', '-' | prepend: '/' | append: '/' %}
 {% assign navigation_item = site.data.navigation | where: 'url', section_url | first %}
-<article class="feed-post">
+{% assign feed_category = entry.collection | replace: '_', '-' %}
+<article class="feed-post" data-feed-category="{{ feed_category | escape }}">
   <a class="feed-link" href="{{ entry.url | relative_url }}">
     {% if include.show_thumbnail and entry.thumbnail %}
       <span class="feed-thumbnail">

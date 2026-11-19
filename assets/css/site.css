@@ -67,6 +67,16 @@ main > .page > h1:first-child + p ~ h2:first-of-type {
   margin-top: 0;
 }
 
+.resume-page .section-index {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.resume-page .section-index > h3 {
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
 .post-meta {
   color: var(--highlight-color);
   opacity: 1;

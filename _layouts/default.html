@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: site.lang | default: 'en' }}">
   {% include head.html %}
-  <body class="site-frame">
+  <body class="site-frame{% if page.body_class %} {{ page.body_class | escape }}{% endif %}">
     {% include header.html %}
 
     <div class="container page-container">
@@ -12,7 +12,9 @@
           </header>
         {% endif %}
 
-        {% include section-tabs.html %}
+        {% if page.url == '/' %}
+          {% include section-tabs.html %}
+        {% endif %}
         {{ content }}
       </main>
 

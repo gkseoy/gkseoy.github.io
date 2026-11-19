@@ -6,6 +6,7 @@ Jekyll과 [Monophase](https://github.com/zivhub/monophase) 테마로 만든 개�
 
 - 이력은 [`Main.md`](Main.md)에서 수정합니다.
 - 논문 리뷰는 `_paper_reviews/`, 참관기는 `_event_notes/`, 세미나 기록은 `_seminars/`에 저장합니다.
+- 메인 화면의 `All`, `Paper Reviews`, `Seminar`, `Event Notes` 버튼은 페이지 이동 없이 같은 글 목록을 필터링합니다.
 - 각 글은 `geminifs.html` 또는 `seminar-name.md`처럼 이름을 정하고, 상단의 `---` 사이에 `title:`과 `date:`를 넣습니다. 각 목록은 `date:` 기준 최신순으로 표시됩니다. 논문 리뷰는 공통 리뷰 레이아웃으로 표시되므로 본문부터 작성하면 됩니다.
 
 ### Resume에 논문, 성적표, 작업물 추가

@@ -3,6 +3,7 @@ layout: section-index
 title: "CV"
 permalink: /resume/
 description: "Education, experience, and skills."
+body_class: resume-page
 ---
 
 <style>
@@ -15,7 +16,6 @@ description: "Education, experience, and skills."
 
   .resume-grid dd {
     margin: 0;
-    font-size: calc(1em - 2pt);
   }
 
   .resume-grid dt {

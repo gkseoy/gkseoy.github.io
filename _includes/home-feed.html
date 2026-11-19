@@ -5,10 +5,13 @@
   {% assign feed_entries = feed_entries | concat: section_documents %}
 {% endfor %}
 {% assign feed_entries = feed_entries | sort: 'date' | reverse %}
-<section class="post-feed" aria-label="Recent posts">
+<section id="post-feed" class="post-feed" aria-label="Recent posts" data-post-feed>
   {% for entry in feed_entries %}
     {% include feed-entry.html entry=entry show_thumbnail=true %}
   {% else %}
     <p>No posts have been published yet.</p>
   {% endfor %}
 </section>
+<p class="post-feed-empty" data-post-feed-empty hidden>No posts have been published in this section yet.</p>
+<p class="visually-hidden" role="status" aria-live="polite" data-post-feed-status></p>
+<script src="{{ '/assets/js/post-filter.js' | relative_url }}" defer></script>

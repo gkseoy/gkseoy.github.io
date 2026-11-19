@@ -1,8 +1,7 @@
 ---
-layout: section-index
+layout: filter-redirect
 title: "Paper Reviews"
 permalink: /paper-reviews/
 description: "Notes on the problems, ideas, and results in the papers I read."
+filter: paper-reviews
 ---
-
-{% include document-list.html collection="paper_reviews" empty_message="No paper reviews have been published yet." %}
