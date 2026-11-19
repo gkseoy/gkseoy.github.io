@@ -90,23 +90,25 @@
   text-decoration: none;
 }
 
-.site-resume {
+.site-resume,
+.site-resume:hover {
   display: inline-flex;
   align-items: center;
   min-height: 2.375rem;
   padding: 0.375rem 0.875rem;
   border-radius: 0.5rem;
-  background: #fff;
-  color: var(--portfolio-accent);
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-
-.site-resume:hover,
-.site-resume:focus-visible,
-.site-resume[aria-current="page"] {
   background: var(--portfolio-accent);
   color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-resume:active,
+.site-resume:focus-visible,
+.site-resume[aria-current="page"] {
+  background: #fff;
+  color: var(--portfolio-accent);
   text-decoration: none;
 }
 
