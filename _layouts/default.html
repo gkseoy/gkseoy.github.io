@@ -4,7 +4,11 @@
   <body class="site-frame{% if page.body_class %} {{ page.body_class | escape }}{% endif %}">
     {% include header.html %}
 
-    <div class="container page-container">
+    <div class="container page-container{% if page.url == '/' %} page-container--home{% endif %}">
+      {% if page.url == '/' %}
+        <div class="home-shell">
+      {% endif %}
+
       <main>
         {% if page.home_summary %}
           <header class="blog-intro">
@@ -17,6 +21,11 @@
         {% endif %}
         {{ content }}
       </main>
+
+      {% if page.url == '/' %}
+          {% include home-sidebar.html %}
+        </div>
+      {% endif %}
 
       {% include footer.html %}
     </div>

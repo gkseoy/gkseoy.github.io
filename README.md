@@ -22,7 +22,7 @@
 ```text
 .
 ├── _config.yml                 # 사이트 기본 정보와 컬렉션 설정
-├── index.md                    # 메인 피드, About, 사이드바 배치
+├── index.md                    # 메인 피드와 About
 ├── Main.md                     # CV
 ├── _paper_reviews/             # 논문 리뷰
 ├── _seminars/                  # 월별 세미나 기록
@@ -33,7 +33,7 @@
 │   ├── social.yml              # 푸터 소셜 링크
 │   └── resume_resources.yml    # CV 작업물·문서 링크
 ├── _includes/                  # 헤더, 푸터, 피드, 사이드바 구성 요소
-├── _layouts/                   # 페이지와 논문 리뷰 레이아웃
+├── _layouts/                   # 홈 2열 구조, 페이지, 논문 리뷰 레이아웃
 └── assets/
     ├── css/                    # 사이트·리뷰·CV 스타일
     ├── js/                     # 필터, 페이지 이동, CV 인터랙션
