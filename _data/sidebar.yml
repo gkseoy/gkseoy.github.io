@@ -1,0 +1,18 @@
+contacts:
+  - label: "Email"
+    value: "zxwmqxx@gmail.com"
+    url: "mailto:zxwmqxx@gmail.com"
+  - label: "GitHub"
+    value: "gkseoy"
+    url: "https://github.com/gkseoy"
+  - label: "Lab"
+    value: "NOSLab"
+    url: "https://noslab.github.io/"
+
+keywords:
+  - "Operating Systems"
+  - "Storage Systems"
+  - "File Systems"
+  - "LLM Agents"
+  - "Memory Management"
+  - "CXL"

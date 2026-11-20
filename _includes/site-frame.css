@@ -69,12 +69,12 @@
 
 .site-wordmark {
   color: var(--portfolio-accent);
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Poppins", "Nunito Sans", Arial, sans-serif;
   font-size: clamp(1.875rem, 1.5rem + 1.4vw, 2.375rem);
-  font-style: italic;
+  font-style: normal;
   font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.04em;
   white-space: nowrap;
 }
 
@@ -313,9 +313,109 @@
   flex-direction: column;
 }
 
+.home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 18rem);
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.home-feed-column {
+  min-width: 0;
+}
+
+.home-sidebar {
+  position: sticky;
+  top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.home-widget {
+  padding: 1.25rem;
+  border: 1px solid var(--portfolio-rule);
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.home-widget-title {
+  margin: 0 0 1rem;
+  color: var(--portfolio-navy);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.home-contact-list {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+}
+
+.home-contact-row {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.home-contact-row dt {
+  color: var(--portfolio-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.home-contact-row dd {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.home-contact-row a {
+  color: var(--portfolio-navy);
+  text-decoration-color: rgba(var(--link-color-rgb), 0.3);
+  text-underline-offset: 0.2em;
+}
+
+.home-contact-row a:hover,
+.home-contact-row a:focus-visible {
+  color: var(--portfolio-accent);
+}
+
+.home-keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-keyword {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--portfolio-rule);
+  border-radius: 100vmax;
+  background: #fff;
+  color: var(--portfolio-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
 .home-page .blog-about {
   margin-top: auto;
   margin-bottom: 1rem;
+}
+
+@media (max-width: 52rem) {
+  .home-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-sidebar {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 34rem) {
@@ -324,6 +424,7 @@
   .feed-link {
     padding-inline: 0;
   }
+  .home-sidebar { grid-template-columns: minmax(0, 1fr); }
 }
 
 .feed-link:hover h2,

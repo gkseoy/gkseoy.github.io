@@ -1,0 +1,26 @@
+{% assign sidebar = site.data.sidebar %}
+<aside class="home-sidebar" aria-label="Contact and keywords">
+  <section class="home-widget" aria-labelledby="home-contact-title">
+    <h2 class="home-widget-title" id="home-contact-title">Contact</h2>
+    <dl class="home-contact-list">
+      {% for contact in sidebar.contacts %}
+        {% assign url_prefix = contact.url | slice: 0, 4 %}
+        <div class="home-contact-row">
+          <dt>{{ contact.label | escape }}</dt>
+          <dd>
+            <a href="{{ contact.url | escape }}"{% if url_prefix == 'http' %} target="_blank" rel="noopener"{% endif %}>{{ contact.value | escape }}</a>
+          </dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </section>
+
+  <section class="home-widget" aria-labelledby="home-keywords-title">
+    <h2 class="home-widget-title" id="home-keywords-title">Keywords</h2>
+    <ul class="home-keyword-list" role="list">
+      {% for keyword in sidebar.keywords %}
+        <li><span class="home-keyword">{{ keyword | escape }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+</aside>

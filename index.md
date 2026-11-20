@@ -5,7 +5,12 @@ home_summary: "Research notes on operating systems, storage systems, and memory 
 body_class: home-page
 ---
 
-{% include home-feed.html %}
+<div class="home-layout">
+  <div class="home-feed-column">
+    {% include home-feed.html %}
+  </div>
+  {% include home-sidebar.html %}
+</div>
 
 <section class="blog-about" aria-labelledby="about" markdown="1">
 
