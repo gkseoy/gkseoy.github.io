@@ -1,5 +1,6 @@
 :root {
   --portfolio-navy: #101d38;
+  --portfolio-wordmark: #173f73;
   --portfolio-accent: #245fba;
   --portfolio-tint: #eaf2ff;
   --portfolio-text-muted: #536074;
@@ -15,7 +16,7 @@
 }
 
 .page-container--home {
-  max-width: 71.5rem;
+  max-width: 72.5rem;
 }
 
 .site-frame {
@@ -64,8 +65,8 @@
   line-height: 1.25;
 }
 
-.site-wordmark {
-  color: var(--portfolio-navy);
+.site-brand .site-wordmark {
+  color: var(--portfolio-wordmark);
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   font-size: clamp(1.375rem, 1rem + 1.4vw, 1.875rem);
   font-style: normal;
@@ -456,7 +457,9 @@
 @media (min-width: 70rem) {
   .home-shell {
     grid-template-columns: minmax(0, 49.5rem) minmax(13.5rem, 15rem);
-    gap: 3rem;
+    gap: 4rem;
+    max-width: 68.5rem;
+    margin-inline: auto;
   }
 
   .home-shell > main {
