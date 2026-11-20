@@ -438,6 +438,7 @@
     align-self: start;
     grid-template-columns: minmax(0, 1fr);
     width: min(18rem, calc(100% - var(--home-sidebar-gap)));
+    margin-top: 8.5rem;
     margin-left: var(--home-sidebar-gap);
   }
 
