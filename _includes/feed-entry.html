@@ -5,7 +5,7 @@
 <article class="feed-post" data-feed-category="{{ feed_category | escape }}">
   <a class="feed-link" href="{{ entry.url | relative_url }}">
     {% if include.show_thumbnail and entry.thumbnail %}
-      <span class="feed-thumbnail">
+      <span class="feed-thumbnail{% if entry.thumbnail_style %} feed-thumbnail--{{ entry.thumbnail_style | escape }}{% endif %}">
         <img src="{{ entry.thumbnail | relative_url | escape }}" alt="{{ entry.thumbnail_alt | default: '' | escape }}" width="160" height="90" loading="lazy">
       </span>
     {% endif %}

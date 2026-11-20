@@ -1,11 +1,3 @@
-@font-face {
-  font-family: "Nunito Sans", Arial, sans-serif;
-  src: url("{{ '/assets/fonts/cormorant-garamond-semibold-italic.ttf' | relative_url }}") format("truetype");
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-}
-
 :root {
   --portfolio-navy: #101d38;
   --portfolio-accent: #245fba;
@@ -23,7 +15,7 @@
 }
 
 .page-container--home {
-  max-width: 70rem;
+  max-width: 71.5rem;
 }
 
 .site-frame {
@@ -73,9 +65,9 @@
 }
 
 .site-wordmark {
-  color: #000;
+  color: var(--portfolio-navy);
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  font-size: clamp(1.625rem, 1.25rem + 1.4vw, 2.125rem);
+  font-size: clamp(1.375rem, 1rem + 1.4vw, 1.875rem);
   font-style: normal;
   font-weight: 700;
   line-height: 1.15;
@@ -118,7 +110,7 @@
 }
 
 .blog-intro {
-  margin-bottom: clamp(1rem, 3vw, 1.75rem);
+  margin-bottom: clamp(2rem, calc(3vw + 1rem), 2.75rem);
 }
 
 .blog-intro p {
@@ -300,6 +292,15 @@
   object-fit: contain;
 }
 
+.feed-thumbnail--publication-logo {
+  border: 1px solid var(--portfolio-rule);
+  background: #fff;
+}
+
+.feed-thumbnail--publication-logo img {
+  padding: clamp(0.65rem, 2vw, 1rem);
+}
+
 .feed-link h2 {
   margin: 0 0 0.75rem;
   font-size: clamp(1.125rem, 1rem + 0.4vw, 1.3rem);
@@ -454,8 +455,8 @@
 
 @media (min-width: 70rem) {
   .home-shell {
-    grid-template-columns: minmax(0, 49.5rem) minmax(14rem, 15rem);
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 49.5rem) minmax(13.5rem, 15rem);
+    gap: 3rem;
   }
 
   .home-shell > main {
@@ -469,7 +470,7 @@
     align-self: start;
     grid-template-columns: minmax(0, 1fr);
     width: 100%;
-    margin-top: 8.5rem;
+    margin-top: 9.5rem;
     margin-left: 0;
   }
 }
