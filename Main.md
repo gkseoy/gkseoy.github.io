@@ -1,6 +1,6 @@
 ---
 layout: section-index
-title: "CV"
+title: "About"
 permalink: /resume/
 description: "Education, experience, and skills."
 body_class: resume-page
@@ -38,6 +38,7 @@ body_class: resume-page
   }
 </style>
 
+
 ### Education
 
 <dl class="resume-grid resume-timeline">
@@ -47,8 +48,6 @@ body_class: resume-page
       <strong>Dongguk University</strong><br>
       Department of Computer Engineering<br>
       Expected graduation in February 2028<br>
-      <em>Research interests include operating systems, storage systems,
-      AI agents, and memory management for LLM-based agents.</em>
     </dd>
   </div>
 
@@ -57,6 +56,8 @@ body_class: resume-page
     <dd>Sookmyung Girls' High School</dd>
   </div>
 </dl>
+
+---
 
 ### Experience
 
@@ -91,6 +92,8 @@ body_class: resume-page
 
 <script src="{{ '/assets/js/resume-experience.js' | relative_url }}" defer></script>
 
+---
+
 ### Skills
 
 <dl class="resume-grid resume-timeline">
@@ -101,7 +104,7 @@ body_class: resume-page
 
   <div class="resume-row">
     <dt>Languages</dt>
-    <dd>OPIc AL (August 28)<br>TOEIC XXX (XX XX)</dd>
+    <dd>OPIc AL (August 28)<br>TOEIC 850 (Expired)</dd>
   </div>
 
   <div class="resume-row">
@@ -119,20 +122,8 @@ body_class: resume-page
   </div>
 </dl>
 
-### Selected Work & Credentials
+---
 
-<ul class="document-list resume-timeline resume-work" role="list">
-{% for resource in site.data.resume_resources %}
-  {% assign resource_url = resource.url %}
-  {% assign resource_path_prefix = resource_url | slice: 0, 1 %}
-  {% if resource_path_prefix == '/' %}
-    {% assign resource_url = resource_url | relative_url %}
-  {% endif %}
-  <li class="resume-row">
-    <a class="document-link" href="{{ resource_url | escape }}">
-      <span class="document-title">{{ resource.title | escape }}</span>
-      {% if resource.type %}<span class="document-meta">{{ resource.type | escape }}</span>{% endif %}
-    </a>
-  </li>
-{% endfor %}
-</ul>
+### Work
+
+
