@@ -4,7 +4,7 @@ title: "NVRAMOS 2026"
 date: 2026-10-22 09:00:00 +0900
 date_label: "2026.10.22–10.23"
 lang: ko
-description: "시스템 연구 발표와 산업 관점의 강연을 들으며 연구자의 고민과 태도를 돌아본 기록입니다."
+description: "NVRAMOS 2026 in The Shilla Jeju"
 permalink: /event-notes/nvramos-2026/
 ---
 
@@ -14,7 +14,7 @@ permalink: /event-notes/nvramos-2026/
 
 <p class="event-note-meta"><time datetime="2026-10-22">2026.10.22</time>–<time datetime="2026-10-23">10.23</time> · 작성 윤서영 · <a href="https://noslab.github.io/pages/gallery/20261022.html" target="_blank" rel="noopener">NOSLab Gallery 원문</a></p>
 
-## 참관기
+### 참관기
 
 NVRAMOS는 제가 공부하는 시스템 분야의 교수님들의 발표와 연구를 직접 들을 수 있는 귀한 기회였습니다. 처음 참석한 학회라 모르는 용어와 기술이 많아 계속 찾아보면서 발표를 들었지만, 그만큼 교수님들의 연구와 지식의 깊이를 체감할 수 있었던 것 같습니다. 또한 기업 관계자분들의 강연을 들으면서, 연구와는 결이 다른 기업과 사업의 관점에서 무엇을 필요로 하고 원하는지에 대해서도 새로운 시각을 접할 수 있었습니다.
 
