@@ -1,0 +1,30 @@
+main .page > .page-title {
+  font-size: 28px;
+  line-height: 1.4;
+  margin-bottom: 28px;
+}
+
+main .event-note {
+  max-width: 48rem;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+main .event-note h2 {
+  margin-top: 28px;
+  margin-bottom: 18px;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+main .event-note p,
+main .event-note li,
+main .event-note blockquote {
+  font-size: 16px;
+}
+
+main .event-note .event-note-meta {
+  margin: 0 0 28px;
+  color: var(--portfolio-text-muted, #536074);
+  font-size: 14px;
+}

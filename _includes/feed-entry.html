@@ -18,7 +18,11 @@
         {% if navigation_item %}<span class="feed-category">{{ navigation_item.title | escape }}</span>{% endif %}
         <span>{{ entry.author | default: site.author.name | escape }}</span>
         <span aria-hidden="true">·</span>
-        <time lang="ko" datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: '%Y년 %-m월 %-d일' }}</time>
+        {% if entry.date_label %}
+          <time datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date_label | escape }}</time>
+        {% else %}
+          <time lang="ko" datetime="{{ entry.date | date_to_xmlschema }}">{{ entry.date | date: '%Y년 %-m월 %-d일' }}</time>
+        {% endif %}
       </div>
     </div>
   </a>
