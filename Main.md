@@ -38,7 +38,7 @@ body_class: resume-page
   }
 </style>
 
-
+<br><br><br>
 ### *Education*
 
 <dl class="resume-grid resume-timeline">
@@ -58,7 +58,7 @@ body_class: resume-page
 </dl>
 
 ---
-<br><br><br>
+
 ### *Experience*
 
 <dl class="resume-grid resume-timeline">
