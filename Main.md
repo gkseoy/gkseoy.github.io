@@ -38,8 +38,8 @@ body_class: resume-page
   }
 </style>
 
-<br><br><br>
-### *Education*
+<br>
+## *Education*
 
 <dl class="resume-grid resume-timeline">
   <div class="resume-row">
@@ -59,7 +59,7 @@ body_class: resume-page
 
 ---
 
-### *Experience*
+## *Experience*
 
 <dl class="resume-grid resume-timeline">
   <div class="resume-row">
@@ -94,7 +94,7 @@ body_class: resume-page
 
 ---
 
-### *Skills*
+## *Skills*
 
 <dl class="resume-grid resume-timeline">
   <div class="resume-row">
@@ -124,6 +124,6 @@ body_class: resume-page
 
 ---
 
-### *Work*
+## *Work*
 
 
