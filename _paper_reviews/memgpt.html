@@ -1,0 +1,244 @@
+---
+title: "[arXiv’24] MemGPT: Towards LLMs as Operating Systems"
+date: 2026-11-20 09:00:00 +0900
+lang: ko
+description: "운영체제의 계층형 메모리와 인터럽트에서 착안해 제한된 context window를 가상화하는 MemGPT의 설계와 평가를 정리합니다."
+thumbnail: /assets/paper-reviews/memgpt/figure-02.png
+thumbnail_alt: "MemGPT의 main context, external context, queue manager와 function executor 구조"
+thumbnail_source: "https://arxiv.org/abs/2310.08560"
+image: /assets/paper-reviews/memgpt/figure-02.png
+---
+
+<p>
+  <a href="https://arxiv.org/abs/2310.08560" target="_blank" rel="noopener">
+    Paper · arXiv:2310.08560
+  </a>
+</p>
+
+<h2>1. Introduction</h2>
+
+<p>LLM은 응답을 생성할 때 <strong>현재 입력에 포함된 정보</strong>를 참조함.</p>
+<p>대화나 문서가 길어지면 context window에 모든 내용을 넣을 수 없으므로, 이전 내용을 제거하거나 요약해야 함.</p>
+<p>Context window를 늘리는 방법도 있지만, 입력이 길어질수록 연산과 메모리 비용이 증가함. 또한 긴 입력의 중간에 있는 정보를 충분히 활용하지 못하는 문제도 있음.</p>
+
+<figure style="--figure-width: 336px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-01.png' | relative_url }}" alt="논문 작성 당시 주요 언어 모델의 context window 크기와 수용 가능한 메시지 수 비교" loading="lazy">
+  <figcaption>논문 작성 당시 모델들이 한 번에 처리할 수 있는 토큰 수와 대략적인 메시지 수를 비교함. 유한한 context window가 장기간의 대화나 대규모 문서 분석을 제한한다는 배경을 보여줌.</figcaption>
+</figure>
+
+<p>운영체제는 물리 메모리보다 큰 데이터를 다루기 위해, 메모리와 디스크 사이에서 필요한 데이터를 이동시킴.</p>
+<p>MemGPT는 이를 LLM의 입력 관리에 적용한 <strong>Virtual Context Management</strong>를 제안함.</p>
+<ul>
+  <li>현재 추론에 필요한 정보는 <strong>main context</strong>에 배치</li>
+  <li>전체 대화 기록과 문서는 <strong>external context</strong>에 보관</li>
+  <li>LLM이 함수 호출로 정보를 저장·검색하고, 현재 입력에 포함할 내용을 관리</li>
+</ul>
+<p>이를 통해 정해진 context window 안에서 필요한 정보를 교체하면서 긴 대화와 문서를 처리함.</p>
+
+<h2>2. Design</h2>
+
+<h3>2.1 Main Context</h3>
+<p>Main context는 현재 LLM 호출에 전달되는 입력 토큰 전체를 의미함. 다음 세 영역으로 구성됨.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">구성 요소</th><th scope="col">저장하는 내용</th><th scope="col">관리 방식</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>System Instructions</td><td>메모리 구조, 함수 사용법, 실행 규칙</td><td>고정된 읽기 전용 지시문</td></tr>
+      <tr><td>Working Context</td><td>사용자 정보, 선호, 에이전트의 persona 등 중요한 사실</td><td>LLM이 함수 호출로 수정</td></tr>
+      <tr><td>FIFO Queue</td><td>최근 대화, 시스템 알림, 함수 호출과 실행 결과</td><td>Queue manager가 관리</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>Working context는 대화가 이어지는 동안 계속 참조해야 하는 정보를 보관함. 예를 들어 사용자의 이름이나 생일을 이 영역에 기록하면, 해당 내용을 처음 언급한 메시지가 FIFO queue에서 빠진 뒤에도 입력에 유지할 수 있음.</p>
+<p>FIFO queue는 최근 메시지를 시간순으로 유지함. 맨 앞에는 queue에서 제거된 과거 메시지의 recursive summary가 들어감.</p>
+
+<h3>2.2 External Context</h3>
+<p>External context는 현재 LLM 입력 바깥에 보관된 정보이며, 두 저장소로 나뉨.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">저장소</th><th scope="col">역할</th><th scope="col">예시</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Recall Storage</td><td>대화와 실행 이력의 원문 보관</td><td>사용자 메시지, LLM 출력, 과거 대화</td></tr>
+      <tr><td>Archival Storage</td><td>장기 보관할 정보와 외부 문서 저장</td><td>업로드한 문서, 별도로 기록한 지식</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>Recall storage에는 새로 들어온 메시지와 생성된 LLM 출력이 기록됨. 이후 해당 메시지가 context window에서 제거되어도 원문을 검색할 수 있음.</p>
+<p>Archival storage에는 LLM이 함수 호출로 정보를 저장하거나, 분석 대상 문서를 미리 넣을 수 있음. 외부 저장소의 내용을 응답에 활용하려면 검색 결과를 main context로 가져와야 함.</p>
+
+<figure style="--figure-width: 576px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-02.png' | relative_url }}" alt="MemGPT의 main context와 external context, queue manager, function executor 구조" loading="lazy">
+  <figcaption>Main context는 system instructions, working context, FIFO queue로 구성됨. Queue manager는 최근 메시지와 recall storage를 관리하고, function executor는 LLM이 생성한 함수 호출을 실행함. LLM은 이 함수들을 통해 외부 정보를 검색하거나 working context를 수정함.</figcaption>
+</figure>
+
+<h3>2.3 Memory Management and Control Flow</h3>
+
+<h4>새 메시지가 들어왔을 때</h4>
+<ol>
+  <li>Queue manager가 새 메시지를 FIFO queue에 추가</li>
+  <li>System instructions, working context, FIFO queue를 연결하여 LLM 입력을 구성</li>
+  <li>LLM이 응답 또는 함수 호출을 생성</li>
+  <li>들어온 메시지와 생성된 출력을 recall storage에 기록</li>
+  <li>함수 호출이 있으면 실행하고, 그 결과를 다시 main context에 추가</li>
+</ol>
+<p>과거 기록을 검색한 경우에도 검색 결과가 queue에 추가되므로, 다음 LLM 호출에서 해당 내용을 확인할 수 있음.</p>
+
+<h4>Context window capacity alert</h4>
+<p>Queue manager는 입력 토큰 수를 확인하여 공간 부족에 대응함.</p>
+
+<p><strong>① Memory pressure warning</strong></p>
+<p>입력이 경고 임계값에 도달하면 시스템 메시지로 공간 부족을 알림. 논문에서는 context window의 <strong>70%</strong>를 예로 제시함.</p>
+<p>LLM은 이 알림을 보고 최근 대화의 중요한 사실을 working context나 archival storage에 기록할 수 있음.</p>
+
+<figure style="--figure-width: 336px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-03.png' | relative_url }}" alt="Memory pressure 알림 뒤 중요한 사용자 정보를 working context에 기록하는 예시" loading="lazy">
+  <figcaption>사용자가 생일과 남자친구에 관해 이야기한 뒤 memory pressure 알림이 발생함. MemGPT는 생일과 남자친구 이름을 working context에 기록하여, 원래 대화가 queue에서 제거된 이후에도 참조할 수 있도록 함.</figcaption>
+</figure>
+
+<p><strong>② Queue flush와 recursive summarization</strong></p>
+<p>입력이 flush 임계값에 도달하면 오래된 메시지를 일정량 제거함. 논문은 임계값 100%, 제거량 context window의 50%에 해당하는 메시지를 예로 듦.</p>
+<p>이때 기존 요약과 새로 제거되는 메시지를 함께 요약하여 recursive summary를 갱신함.</p>
+<p>따라서 context window에는 최근 대화와 과거 요약이 남고, 제거된 메시지의 원문은 recall storage에서 검색할 수 있음.</p>
+
+<h4>Retrieval</h4>
+<p>현재 입력에 필요한 정보가 없으면 LLM이 recall storage 검색 함수를 호출함.</p>
+<p>예를 들어 사용자가 “놀이공원에 다녀왔다”고 말하면, MemGPT는 과거 대화에서 해당 장소를 검색하여 누구와 관련된 곳인지 확인할 수 있음.</p>
+<p>검색 결과는 pagination으로 나누어 반환함. LLM은 먼저 받은 결과를 확인한 뒤, 부족하면 다음 페이지를 요청함. 한 번의 검색으로 너무 많은 정보가 입력에 들어가는 것을 조절하는 방식임.</p>
+
+<figure style="--figure-width: 384px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-04.png' | relative_url }}" alt="MemGPT가 Six Flags에 관한 과거 대화를 검색하는 예시" loading="lazy">
+  <figcaption>MemGPT가 <code>six flags</code>를 검색하여, 사용자가 James와 처음 만난 장소가 해당 놀이공원이었다는 과거 대화를 가져옴. 검색한 내용을 바탕으로 최근 대화와 과거 경험을 연결하여 응답함.</figcaption>
+</figure>
+
+<h4>Message update</h4>
+<p>Working context의 정보는 새로운 대화에 맞춰 수정할 수 있음.</p>
+
+<figure style="--figure-width: 336px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-05.png' | relative_url }}" alt="MemGPT가 working context의 사용자 관계 정보를 수정하는 예시" loading="lazy">
+  <figcaption>사용자가 James와 헤어졌다고 말하자, MemGPT가 저장된 정보를 <code>Boyfriend named James</code>에서 <code>Ex-boyfriend named James</code>로 수정함. 이후 응답에서 변경된 관계를 반영할 수 있도록 현재 메모리를 갱신하는 예시임.</figcaption>
+</figure>
+
+<h4>Function Executor와 Heartbeat</h4>
+<p>LLM은 어떤 정보를 검색하거나 수정할지 결정하고, function executor가 실제 함수를 실행함.</p>
+<p>Executor는 함수 이름과 인자를 확인한 뒤 실행 결과를 반환함. 오류가 발생하면 오류 내용도 LLM 입력에 전달하여, 다음 호출에서 행동을 수정할 수 있도록 함.</p>
+<p>여러 번의 함수 실행이 필요한 작업에서는 <code>request_heartbeat=true</code>를 사용함.</p>
+<ul>
+  <li>Heartbeat를 요청하면 함수 실행 후 결과를 추가하고 LLM을 다시 호출함.</li>
+  <li>LLM은 결과를 읽고 추가 검색이나 메모리 수정을 이어갈 수 있음.</li>
+  <li>실행 제어를 넘기면 다음 사용자 메시지나 외부 이벤트가 들어올 때까지 기다림.</li>
+</ul>
+<p>예를 들어 검색 → 결과 확인 → 다음 페이지 검색 → 답변을 하나의 사용자 요청 안에서 이어서 수행할 수 있음.</p>
+<p>사용자 메시지 외에도 메모리 경고, 문서 업로드 완료 알림, 예약된 이벤트 등이 LLM 실행을 시작하는 계기가 될 수 있음.</p>
+
+<h2>3. Evaluation</h2>
+
+<h3>3.1 평가 구성</h3>
+<p>논문은 MemGPT를 두 영역에서 평가함.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">평가 영역</th><th scope="col">과제</th><th scope="col">확인하는 능력</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Conversational Agents</td><td>Deep Memory Retrieval</td><td>과거 대화의 구체적인 사실을 찾아 답변하는 능력</td></tr>
+      <tr><td>Conversational Agents</td><td>Conversation Opener</td><td>과거 사용자 정보를 활용하여 대화를 시작하는 능력</td></tr>
+      <tr><td>Document Analysis</td><td>Multi-document QA</td><td>여러 문서에서 근거를 찾아 질문에 답변하는 능력</td></tr>
+      <tr><td>Document Analysis</td><td>Nested Key-value Retrieval</td><td>검색 결과를 다음 검색에 활용하는 다단계 조회 능력</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>기반 모델로 GPT-3.5 Turbo, GPT-4, GPT-4 Turbo를 사용하여, 모델별로 MemGPT를 적용한 결과를 비교함.</p>
+
+<h3>3.2 Deep Memory Retrieval — 과거 대화의 사실 찾기</h3>
+<p>Multi-Session Chat 데이터셋의 과거 5개 세션을 바탕으로, 이전 대화를 알아야 답할 수 있는 질문을 추가함.</p>
+<ul>
+  <li>Baseline은 이전 대화의 손실 요약을 입력으로 받음.</li>
+  <li>MemGPT는 전체 대화 원문에 접근할 수 있지만, 필요한 내용을 recall storage에서 검색해야 함.</li>
+</ul>
+<p>정확도는 LLM judge로 평가하고, 정답 표현이 얼마나 포함되었는지 ROUGE-L recall도 측정함.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">기반 모델</th><th scope="col">Baseline 정확도</th><th scope="col">MemGPT 정확도</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>GPT-3.5 Turbo</td><td>38.7%</td><td><strong>66.9%</strong></td></tr>
+      <tr><td>GPT-4</td><td>32.1%</td><td><strong>92.5%</strong></td></tr>
+      <tr><td>GPT-4 Turbo</td><td>35.3%</td><td><strong>93.4%</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<figure style="--figure-width: 384px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-06.png' | relative_url }}" alt="기반 모델별 baseline과 MemGPT의 deep memory retrieval 정확도 및 ROUGE-L 비교" loading="lazy">
+  <figcaption>모든 기반 모델에서 MemGPT를 적용했을 때 정확도와 ROUGE-L recall이 증가함. 과거 대화의 세부 사항을 묻는 과제에서, 요약에 포함되지 않은 정보도 원문 검색으로 다시 가져올 수 있다는 차이가 드러남.</figcaption>
+</figure>
+
+<h3>3.3 Conversation Opener — 사용자 정보를 활용한 대화 시작</h3>
+<p>과거 대화에서 알게 된 사용자 정보로 새로운 대화를 시작하도록 함.</p>
+<p>예를 들어 사용자가 이전에 여행 계획을 이야기했다면, 다음 대화에서 여행이 어땠는지 먼저 물어볼 수 있음. Working context에 유지한 사용자 정보를 질문 없이도 응답에 활용하는 과제임.</p>
+<p>생성한 문장과 사용자 persona 정보 사이의 유사도인 SIM-1·SIM-3, 사람이 작성한 시작 문장과의 유사도인 SIM-H를 측정함.</p>
+
+<figure style="--figure-width: 384px;">
+  <img src="{{ '/assets/paper-reviews/memgpt/figure-07.png' | relative_url }}" alt="MemGPT와 사람이 작성한 conversation opener의 persona 유사도 비교" loading="lazy">
+  <figcaption>MemGPT의 시작 문장은 사용자 persona와 높은 유사도를 보였으며, SIM-1·SIM-3에서 사람이 작성한 문장보다 높은 값도 나타남. 논문은 MemGPT가 더 긴 문장으로 여러 사용자 정보를 함께 언급하는 경향도 관찰함.</figcaption>
+</figure>
+
+<h3>3.4 Multi-document QA — 여러 문서에서 답 찾기</h3>
+<p>NaturalQuestions-Open에서 선택한 50개 질문과 Wikipedia 문서를 사용함.</p>
+<p>Baseline은 검색한 상위 K개 문서를 입력에 넣고 답변함. 문서가 context window에 들어가지 않으면 각 문서를 잘라서 넣음.</p>
+<p>MemGPT는 문서를 archival storage에 보관하고, 필요한 내용을 함수 호출로 검색함. 한 번의 검색에서 충분한 근거를 찾지 못하면 추가 검색이나 다음 페이지 조회를 수행할 수 있음.</p>
+<p>문서 검색에는 임베딩 기반 유사도 검색을 사용하며, 실험 구현은 PostgreSQL, pgvector, HNSW index를 활용함.</p>
+
+<div class="notion-columns">
+  <div>
+    <figure style="--figure-width: 336px;">
+      <img src="{{ '/assets/paper-reviews/memgpt/figure-08.png' | relative_url }}" alt="검색 문서 수에 따른 baseline과 MemGPT의 multi-document QA 정확도" loading="lazy">
+      <figcaption>가로축은 baseline에 제공한 검색 문서 수, 세로축은 정확도임. Baseline은 문서 수가 늘면서 초기에 정확도가 높아지지만, 입력 한도 때문에 문서를 더 많이 잘라야 하는 구간에서는 성능이 떨어짐. GPT-4·GPT-4 Turbo 기반 MemGPT는 외부 검색을 반복하는 방식으로 약 0.72의 정확도를 유지함. GPT-3.5 기반 MemGPT는 약 0.40으로, 기반 모델의 함수 호출 능력에 따른 차이가 나타남.</figcaption>
+    </figure>
+  </div>
+  <div>
+    <figure style="--figure-width: 468px;">
+      <img src="{{ '/assets/paper-reviews/memgpt/figure-09.png' | relative_url }}" alt="MemGPT가 검색 결과의 다음 페이지를 요청해 정답 근거를 찾는 예시" loading="lazy">
+      <figcaption>최초 노벨 물리학상 수상자를 묻는 질문에 MemGPT가 archival storage를 검색함. 첫 결과 페이지에서 답을 찾지 못한 뒤 <code>page=2</code>를 요청하고, 추가 결과에서 근거를 확인하여 Wilhelm Conrad Röntgen이라고 답함.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<p>논문은 MemGPT도 정답 문서를 찾기 전에 검색을 중단하는 경우가 있다고 보고함. 원문이 저장되어 있어도, 실제 답변에 활용하려면 LLM이 충분한 검색을 수행해야 함.</p>
+
+<h3>3.5 Nested Key-value Retrieval — 다단계 검색</h3>
+<p>일반적인 key-value 조회는 주어진 key의 value를 찾으면 끝남. Nested KV에서는 찾은 value가 다시 다른 항목의 key일 수 있으므로, 최종 값에 도달할 때까지 조회를 이어가야 함.</p>
+<p>예를 들어 A → B, B → C가 저장되어 있다면, A를 조회해 얻은 B를 다음 검색에 사용하고 최종적으로 C를 반환해야 함.</p>
+<p>실험은 140개의 key-value 쌍, 약 8K tokens로 구성하고, 중첩 수준과 항목의 배치를 바꾸어 수행함.</p>
+
+<div class="notion-columns">
+  <div>
+    <figure style="--figure-width: 336px;">
+      <img src="{{ '/assets/paper-reviews/memgpt/figure-10.png' | relative_url }}" alt="중첩 수준에 따른 baseline과 MemGPT의 nested key-value retrieval 정확도" loading="lazy">
+      <figcaption>가로축은 nesting level, 세로축은 정확도임. Baseline 모델들은 중첩 수준이 높아질수록 정확도가 감소하며, 그림의 level 3에서는 0에 도달함. <strong>GPT-4 기반 MemGPT는 표시된 모든 수준에서 100%</strong>를 유지함. GPT-4 Turbo·GPT-3.5 기반 MemGPT도 각각의 baseline보다 개선되지만, 필요한 조회를 끝까지 수행하지 못하는 경우가 나타남.</figcaption>
+    </figure>
+  </div>
+  <div>
+    <figure style="--figure-width: 288px;">
+      <img src="{{ '/assets/paper-reviews/memgpt/figure-11.png' | relative_url }}" alt="MemGPT가 key-value 검색 결과를 다음 검색의 key로 사용하는 예시" loading="lazy">
+      <figcaption>MemGPT는 <code>831…ea5</code>를 검색하여 <code>5b8…4c3</code>을 얻고, 이를 다시 검색하여 <code>f37…617</code>을 찾음. 마지막 값으로 추가 검색한 뒤 해당 값이 새로운 key로 이어지지 않는 것을 확인하고 최종 답으로 반환함.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<h2>4. Conclusion</h2>
+<p>MemGPT는 main context, 외부 저장소, 함수 호출, 이벤트 기반 실행을 결합하여 장기 기억을 관리함.</p>
+<p>최근 대화는 FIFO queue에 유지하고, 중요한 사실은 working context에 기록함. 과거 대화와 문서의 원문은 외부 저장소에 보관하며, 필요한 시점에 검색하여 현재 입력으로 가져옴. 공간이 부족해지면 오래된 메시지를 제거하고 recursive summary를 갱신함.</p>
+<p>실험에서는 과거 대화의 세부 정보 검색과 다단계 문서 조회에서 성능이 개선됨. 검색을 얼마나 이어갈지와 어떤 정보를 저장할지를 LLM이 결정하므로, 기반 모델의 함수 호출 및 실행 제어 능력이 결과에 영향을 줌.</p>
