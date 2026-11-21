@@ -70,36 +70,84 @@ body:has(.resume-experience-dialog[open]) {
 
 .resume-work-list {
   display: grid;
-  gap: 0.9rem;
+  gap: 1.75rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .resume-work-item {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-areas:
+    "title type"
+    "venue role";
   align-items: baseline;
-  gap: 0.25rem clamp(1.5rem, 4vw, 3rem);
+  column-gap: 2rem;
+  row-gap: 0.3rem;
+  margin: 0;
+  padding: 0;
 }
 
 .resume-work-title,
 .resume-work-title:visited,
 .resume-work-title:hover,
 .resume-work-title:focus-visible {
+  grid-area: title;
   color: #111827;
+  font-size: 1.05rem;
   font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.resume-work-title:hover,
+.resume-work-title:focus-visible {
+  text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
+.resume-work-venue {
+  grid-area: venue;
+  color: var(--portfolio-text-muted, #536074);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 .resume-work-meta {
-  padding-inline: 0.2em;
-  background: linear-gradient(
-    transparent 42%,
-    #fff1a8 42%,
-    #fff1a8 90%,
-    transparent 90%
-  );
+  grid-area: type;
+  padding: 0;
+  background: none;
   color: var(--portfolio-accent, #245fba);
-  font-weight: 650;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.resume-work-role {
+  grid-area: role;
+  color: var(--portfolio-text-muted, #536074);
+  font-size: 0.875rem;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .resume-work-item {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "title"
+      "venue"
+      "type"
+      "role";
+    row-gap: 0.25rem;
+  }
+
+  .resume-work-meta,
+  .resume-work-role {
+    text-align: left;
+  }
 }
