@@ -94,17 +94,10 @@ body:has(.resume-experience-dialog[open]) {
 .resume-work-title:hover,
 .resume-work-title:focus-visible {
   grid-area: title;
-  color: #111827;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.5;
+  font: inherit;
+  font-weight: 400;
+  color: var(--body-color, #030920);
   text-decoration: none;
-}
-
-.resume-work-title:hover,
-.resume-work-title:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
 }
 
 .resume-work-venue {
