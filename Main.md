@@ -126,4 +126,18 @@ body_class: resume-page
 
 ## Work
 
+<!--
+  Edit each title, PDF filename, and activity/period below.
+  Place the PDF files in assets/resume/.
+-->
+<ul class="resume-work-list" role="list">
+  <li class="resume-work-item">
+    <a class="resume-work-title" href="{{ '/assets/resume/work-01.pdf' | relative_url }}" target="_blank" rel="noopener">Work title 1</a>
+    <span class="resume-work-meta">Activity or period 1</span>
+  </li>
+  <li class="resume-work-item">
+    <a class="resume-work-title" href="{{ '/assets/resume/work-02.pdf' | relative_url }}" target="_blank" rel="noopener">Work title 2</a>
+    <span class="resume-work-meta">Activity or period 2</span>
+  </li>
+</ul>
 

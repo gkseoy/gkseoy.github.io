@@ -67,3 +67,39 @@ body:has(.resume-experience-dialog[open]) {
 .resume-experience-close:hover {
   background: rgba(0, 0, 0, 0.08);
 }
+
+.resume-work-list {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resume-work-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem clamp(1.5rem, 4vw, 3rem);
+}
+
+.resume-work-title,
+.resume-work-title:visited,
+.resume-work-title:hover,
+.resume-work-title:focus-visible {
+  color: #111827;
+  font-weight: 700;
+  text-underline-offset: 0.2em;
+}
+
+.resume-work-meta {
+  padding-inline: 0.2em;
+  background: linear-gradient(
+    transparent 42%,
+    #fff1a8 42%,
+    #fff1a8 90%,
+    transparent 90%
+  );
+  color: var(--portfolio-accent, #245fba);
+  font-weight: 650;
+}
