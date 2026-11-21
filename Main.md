@@ -132,7 +132,7 @@ body_class: resume-page
 -->
 <ul class="resume-work-list" role="list">
   <li class="resume-work-item">
-    <a class="resume-work-title" href="{{ '/assets/resume/work-01.pdf' | relative_url }}" target="_blank" rel="noopener">Work title 1</a>
+    <a class="코딩 기반 AI Agent의 프로그래밍 언어별 토큰 사용량 및 작업 완료 시간 분석" href="{{ '/assets/resume/work-01.pdf' | relative_url }}" target="_blank" rel="noopener">Work title 1</a>
     <span class="resume-work-meta">Activity or period 1</span>
   </li>
   <li class="resume-work-item">
