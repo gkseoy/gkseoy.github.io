@@ -1,0 +1,237 @@
+---
+title: "[NeurIPS’25] A-Mem: Agentic Memory for LLM Agents"
+date: 2026-08-07 09:00:00 +0900
+lang: ko
+description: "Notes of A-Mem paper"
+thumbnail: /assets/conferences/neurips-logo.svg
+thumbnail_alt: "Official NeurIPS logo"
+thumbnail_source: "https://neurips.cc/Conferences/2025/Press"
+thumbnail_style: publication-logo
+image: /assets/conferences/neurips-logo.svg
+---
+
+<h2>1. Introduction</h2>
+
+<ul>
+  <li>기존 메모리 시스템의 한계</li>
+</ul>
+
+<p>LLM Agent가 장기간 사용자와 상호작용하려면 과거의 대화와 경험을 저장하고, 현재 작업에 필요한 정보를 다시 가져올 수 있어야 함.</p>
+<p>기존 메모리 시스템은 대화 저장과 검색 기능을 제공하지만, <strong>새로운 경험이 들어왔을 때 기존 기억을 어떻게 연결하고 재구성할지</strong>에 대한 기능은 제한적임.</p>
+<p>예를 들어 사용자가 여러 대화에서 같은 프로젝트를 이야기하더라도, 각 대화를 독립적으로 저장하면 프로젝트의 요구사항과 변경 이력을 함께 활용하기 어려울 수 있음.</p>
+<p>⇒ 미리 정의한 분류와 관계에 의존하는 방식이 새로운 경험을 유연하게 조직하는 데 한계가 있다고 설명함.</p>
+
+<ul>
+  <li>A-MEM의 아이디어</li>
+</ul>
+
+<ol>
+  <li>경험을 <strong>속성을 갖춘 노트</strong>로 만듦.</li>
+  <li>관련된 과거 기억을 찾아 <strong>연결 관계</strong>를 생성함.</li>
+  <li>새로운 정보를 반영하여 <strong>기존 기억의 설명과 속성</strong>을 갱신함.</li>
+</ol>
+
+<p>이렇게 기억이 추가될 때마다 메모리 네트워크를 함께 재구성하여, 이후 검색에서 관련 경험을 더 잘 활용하도록 함.</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-01.png' | relative_url }}" alt="기존 메모리 시스템과 A-MEM의 agentic memory 구조 비교" loading="lazy">
+  <figcaption><strong>(a)</strong> 기존 구조에서는 Agent가 정해진 방식으로 메모리를 읽고 씀. <strong>(b)</strong> A-MEM은 메모리 내부에서도 LLM이 기억의 속성, 연결 관계, 갱신 내용을 결정하도록 하여 새로운 경험에 따라 메모리 구성이 변화하도록 함.</figcaption>
+</figure>
+
+<h2>2. Background and Motivation</h2>
+
+<h3>Zettelkasten</h3>
+
+<p>A-MEM은 <strong>Zettelkasten</strong>이라는 지식 관리 방식에서 아이디어를 얻음.</p>
+<p>Zettelkasten에서는 지식을 작은 노트로 기록하고, 관련된 노트 사이에 연결을 만듦. 새로운 내용을 알게 되면 기존 노트와 연결하면서 지식의 관계를 확장함.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">원리</th><th scope="col">A-MEM에서의 적용</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Atomic Note</strong></td><td>하나의 독립적으로 이해할 수 있는 지식 단위를 노트로 구성함</td></tr>
+      <tr><td><strong>Flexible Linking</strong></td><td>내용과 의미에 따라 관련 기억을 연결함</td></tr>
+      <tr><td><strong>Continuous Evolution</strong></td><td>새로운 경험을 반영하여 기존 기억의 설명과 속성을 갱신함</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>하나의 노트는 여러 주제와 연결될 수 있음. 예를 들어 캐시 구현에 관한 대화는 웹 개발, 메모리 관리, 성능 최적화와 각각 관련될 수 있음.</p>
+
+<h3>검색과 메모리 조직의 관계</h3>
+
+<p>검색은 저장된 기억의 표현에 영향을 받음. 원래 대화에 현재 질문과 같은 표현이 없더라도, 해당 대화의 의미를 설명하는 키워드와 맥락이 추가되어 있으면 관련성을 찾는 데 도움이 될 수 있음.</p>
+<p>A-MEM은 <strong>기억을 저장할 때 검색에 사용할 표현을 함께 생성</strong>하고, 이후 경험에 따라 그 표현을 갱신함.</p>
+
+<h2>3. A-MEM Methodology</h2>
+
+<h3>3.1 Note Construction — 경험을 구조화된 노트로 변환</h3>
+
+<p>새로운 상호작용이 들어오면 원문과 시각 정보를 바탕으로 LLM이 키워드, 태그, 맥락 설명을 생성함.</p>
+<p>키워드는 구체적인 개념을, 태그는 비교적 넓은 범주를 나타냄. Context는 해당 대화가 어떤 상황과 목적을 가진 내용인지 설명</p>
+<p>임베딩은 <strong>원문·키워드·태그·맥락 설명을 연결한 텍스트</strong>로 생성함. 따라서 원문과 LLM이 생성한 의미 정보가 검색 표현에 함께 반영됨.</p>
+
+<h3>3.2 Link Generation — 관련 기억 연결</h3>
+
+<p>새 노트가 만들어지면 기존 기억 중 연결할 대상을 찾음.</p>
+
+<ol>
+  <li>새 노트와 기존 노트의 임베딩 사이에서 <strong>cosine similarity</strong>를 계산함.</li>
+  <li>유사도가 높은 <strong>top-k 기억</strong>을 후보로 선택함.</li>
+  <li>LLM이 새 기억과 후보들의 내용·속성을 비교함.</li>
+  <li>의미 있는 관계가 있다고 판단한 기억 사이에 링크를 생성함.</li>
+</ol>
+
+<p>임베딩 검색은 비교할 후보를 줄이는 역할을 하고, LLM은 후보 사이의 공통 개념과 맥락을 분석하여 연결 여부를 결정함.</p>
+
+<h3>3.3 Memory Evolution — 기존 기억 갱신</h3>
+
+<p>새로운 경험은 과거 경험을 이해하는 데 필요한 정보를 추가할 수 있음. A-MEM은 새 기억과 관련된 기존 노트의 <strong>context, keywords, tags</strong>를 갱신할지 판단함.</p>
+<p>Figure 2의 캐시 개발 사례에서는 처음에 메모리와 디스크를 사용하는 캐시 구현을 요청하고, 이후 메모리 사용량 문제와 LRU 정책 도입을 이야기함.</p>
+<p>이처럼 후속 경험이 쌓이면, 이전 기억을 새로운 요구사항과 함께 해석할 수 있도록 관련 설명과 속성을 갱신함.</p>
+<p>갱신된 노트는 메모리 집합의 기존 노트를 대체함. 이 과정이 반복되면서 기억 사이의 공통 주제와 관계가 점차 축적됨.</p>
+
+<h3>3.4 Memory Retrieval — 현재 질문에 필요한 기억 검색</h3>
+
+<p>현재 질문에 답할 때는 질문을 임베딩으로 변환하고, 저장된 노트와의 유사도를 계산하여 top-k 기억을 선택함. 선택한 기억은 LLM의 프롬프트에 포함됨.</p>
+<p>본문에서는 <strong>유사도 기반 top-k 검색</strong>을 정의하며, Figure 2에서는 검색된 기억과 연결된 관련 기억도 함께 활용하는 구조로 설명함.</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-02.png' | relative_url }}" alt="A-MEM의 note construction, link generation, memory evolution, memory retrieval 구조" loading="lazy">
+  <figcaption>왼쪽부터 새로운 경험을 노트로 만드는 <strong>Note Construction</strong>, 관련 기억을 연결하는 <strong>Link Generation</strong>, 기존 기억을 갱신하는 <strong>Memory Evolution</strong>, 질문에 필요한 기억을 가져오는 <strong>Memory Retrieval</strong>을 나타냄. ‘Box’는 관련 기억들의 연결을 표현하며, 하나의 기억이 여러 box에 속할 수 있음.</figcaption>
+</figure>
+
+<h2>4. Evaluation</h2>
+
+<h3>4.1 실험 구성</h3>
+
+<p>주요 평가는 <strong>LoCoMo</strong>와 <strong>DialSim</strong>에서 수행함. LoCoMo는 장기간의 대화에 관한 질문을, DialSim은 장기 다자간 대화에 관한 질문을 포함함.</p>
+<p>LoCoMo의 질문 유형은 다음과 같음.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">유형</th><th scope="col">평가 내용</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Single Hop</strong></td><td>하나의 근거로 답할 수 있는 질문</td></tr>
+      <tr><td><strong>Multi Hop</strong></td><td>여러 기억의 정보를 조합해야 하는 질문</td></tr>
+      <tr><td><strong>Temporal</strong></td><td>시간과 사건 순서를 이해해야 하는 질문</td></tr>
+      <tr><td><strong>Open Domain</strong></td><td>대화와 외부 지식을 함께 활용하는 질문</td></tr>
+      <tr><td><strong>Adversarial</strong></td><td>대화에서 답을 찾을 수 없는 질문</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>주요 비교 방법은 전체 대화를 입력하는 <strong>LoCoMo baseline</strong>, <strong>ReadAgent</strong>, <strong>MemoryBank</strong>, <strong>MemGPT</strong>임.</p>
+<p>본문에서는 GPT-4o-mini, GPT-4o, Qwen2.5 1.5B·3B, Llama 3.2 1B·3B를 사용함. 임베딩 모델은 <code>all-MiniLM-L6-v2</code>임.</p>
+<p>주요 지표는 정답과 생성 답변의 단어 일치를 측정하는 <strong>F1</strong>, <strong>BLEU-1</strong>이며, 질문에 답할 때 사용한 평균 토큰 수도 보고함.</p>
+
+<h3>4.2 LoCoMo 성능</h3>
+
+<p>A-MEM은 특히 시간 관련 질문과 여러 기억을 활용하는 질문에서 개선을 보임. 다만 모델과 질문 유형에 따라 다른 방법이 더 높은 점수를 보이는 경우도 있음.</p>
+<p>GPT-4o-mini의 대표 결과는 다음과 같음.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">방법</th><th scope="col">Multi Hop F1</th><th scope="col">Temporal F1</th><th scope="col">Single Hop F1</th><th scope="col">평균 토큰 수</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>LoCoMo baseline</td><td>25.02</td><td>18.41</td><td>40.36</td><td>16,910</td></tr>
+      <tr><td>MemGPT</td><td>26.65</td><td>25.52</td><td>41.04</td><td>16,977</td></tr>
+      <tr><td><strong>A-MEM</strong></td><td><strong>27.02</strong></td><td><strong>45.85</strong></td><td><strong>44.65</strong></td><td><strong>2,520</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>GPT-4o에서는 A-MEM의 Multi Hop·Temporal F1이 높았지만, Single Hop에서는 전체 대화를 제공한 baseline이 더 높은 점수를 보였음.</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-03.png' | relative_url }}" alt="여섯 기반 모델에서 LoCoMo 질문 유형별 F1, BLEU-1, 평균 순위와 토큰 수 비교" loading="lazy">
+  <figcaption>여섯 기반 모델에서 F1, BLEU-1, 평균 순위와 토큰 수를 비교함. A-MEM은 여러 유형에서 높은 성능을 보이면서, 전체 대화를 사용하는 LoCoMo·MemGPT 설정보다 적은 토큰을 사용함. 이 결과는 표에 보고된 질문 응답 토큰 수를 기준으로 함.</figcaption>
+</figure>
+
+<h3>4.3 DialSim 성능</h3>
+
+<p>더 긴 다자간 대화에서도 기억을 활용할 수 있는지 평가함.</p>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">방법</th><th scope="col">F1</th><th scope="col">BLEU-1</th><th scope="col">ROUGE-L</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>LoCoMo baseline</td><td>2.55</td><td>3.13</td><td>2.75</td></tr>
+      <tr><td>MemGPT</td><td>1.18</td><td>1.07</td><td>0.96</td></tr>
+      <tr><td><strong>A-MEM</strong></td><td><strong>3.45</strong></td><td><strong>3.37</strong></td><td><strong>3.54</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-04.png' | relative_url }}" alt="DialSim에서 LoCoMo, MemGPT, A-MEM의 평가 지표 비교" loading="lazy">
+  <figcaption>A-MEM이 F1, BLEU-1, ROUGE와 의미 유사도 등 보고된 지표에서 가장 높은 값을 보임. F1은 LoCoMo baseline의 2.55에서 3.45로 증가하지만, 세 방법 모두 절대 점수는 낮아 해당 장기 대화 과제가 어렵다는 점도 드러남.</figcaption>
+</figure>
+
+<h3>4.4 Ablation Study — 링크와 갱신의 효과</h3>
+
+<ul>
+  <li><strong>Link Generation(LG)</strong>과 <strong>Memory Evolution(ME)</strong>을 제거하여 각 기능이 성능에 미치는 영향을 확인함.</li>
+</ul>
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th scope="col">구성</th><th scope="col">Multi Hop F1</th><th scope="col">Temporal F1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>LG·ME 모두 제거</td><td>9.65</td><td>24.55</td></tr>
+      <tr><td>ME만 제거</td><td>21.35</td><td>31.24</td></tr>
+      <tr><td><strong>전체 A-MEM</strong></td><td><strong>27.02</strong></td><td><strong>45.85</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>링크만 사용하는 구성도 두 기능을 모두 제거한 구성보다 높은 성능을 보임. 여기에 기존 기억의 설명과 속성 갱신을 추가하면 성능이 더 높아짐.</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-05.png' | relative_url }}" alt="GPT-4o-mini에서 link generation과 memory evolution의 ablation 결과" loading="lazy">
+  <figcaption>GPT-4o-mini에서 LG와 ME의 효과를 비교함. 두 기능을 모두 제거했을 때 성능이 가장 낮고, 전체 모델이 다섯 질문 유형에서 가장 높은 F1과 BLEU-1을 보임.</figcaption>
+</figure>
+
+<h3>4.5 검색 개수 <em>k</em>의 영향</h3>
+
+<p>검색하는 기억이 많아지면 답변에 필요한 근거를 더 확보할 수 있지만, 관련성이 낮은 정보와 입력 길이도 증가함.</p>
+<p>실험에서는 GPT-4o-mini의 <em>k</em>를 <strong>10, 20, 30, 40, 50</strong>으로 바꾸어 평가함.</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-06.png' | relative_url }}" alt="검색 개수 k에 따른 Multi Hop, Temporal, Open Domain, Single Hop, Adversarial 성능 변화" loading="lazy">
+</figure>
+
+<h3>4.6 비용과 확장성</h3>
+
+<p>A-MEM은 노트 임베딩을 저장하므로, 기억 수가 늘어나면 메모리 사용량도 함께 증가함.</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-07.png' | relative_url }}" alt="메모리 규모에 따른 A-MEM, MemoryBank, ReadAgent의 메모리 사용량과 검색 시간 비교" loading="lazy">
+  <figcaption>측정된 메모리 사용량은 메모리 수에 비례하여 증가함. A-MEM의 검색 시간은 논문 보고값 기준 0.31 µs에서 3.70 µs로 증가했으며, MemoryBank보다 길고 ReadAgent보다 짧았음. 표의 검색 시간은 앞서 보고한 LLM 기반 메모리 처리 시간과 별도의 지표임.</figcaption>
+</figure>
+
+<h3>4.7 메모리 표현 분석</h3>
+
+<p>노트 임베딩을 <strong>t-SNE</strong>로 2차원에 표현하여, 링크 생성과 기억 갱신을 적용했을 때 분포가 어떻게 달라지는지 관찰함.</p>
+<p>비교 대상인 <strong>Base Memory</strong>는 LG와 ME를 제거한 A-MEM</p>
+
+<figure style="--figure-width: 704px;">
+  <img src="{{ '/assets/paper-reviews/amem/figure-08.png' | relative_url }}" alt="두 대화에서 A-MEM과 Base Memory의 t-SNE 기억 임베딩 분포 비교" loading="lazy">
+  <figcaption><strong>(a)</strong> Dialogue 1, <strong>(b)</strong> Dialogue 2의 기억 분포를 보여줌. 파란색은 A-MEM, 빨간색은 Base Memory임. 논문은 A-MEM에서 더 응집된 분포가 나타나며, 특히 Dialogue 2의 중앙 영역에서 군집이 형성된다고 해석함.</figcaption>
+</figure>
+
+<h2>5. Conclusion and Limitations</h2>
+
+<p>A-MEM은 <strong>노트 생성 → 관련 기억 연결 → 기존 기억 갱신 → 질문 기반 검색</strong>으로 장기 기억을 관리함.</p>
+<p>새로운 경험이 들어올 때 기존 기억의 맥락과 분류를 함께 조정하여, 이후 검색과 답변에 활용할 수 있는 표현을 축적함. 실험에서는 링크 생성과 기억 갱신을 함께 사용한 구성이 높은 성능을 보였음.</p>
+<p>논문에서 제시한 한계는 <strong>기억을 조직하는 품질이 기반 LLM의 능력에 영향을 받는다</strong>는 점임. 같은 경험에서도 모델에 따라 다른 설명과 연결이 생성될 수 있음. 현재 구현은 텍스트 중심이며, 이미지와 오디오를 포함한 기억 관리는 향후 과제로 제시함.</p>
