@@ -299,6 +299,15 @@
   object-fit: contain;
 }
 
+.feed-thumbnail--cover {
+  background: #fff;
+}
+
+.feed-thumbnail--cover img {
+  object-fit: cover;
+  object-position: center;
+}
+
 .feed-thumbnail--publication-logo {
   border: 1px solid var(--portfolio-rule);
   background: #fff;
