@@ -11,7 +11,7 @@
   const status = document.querySelector("[data-post-feed-status]");
   const validFilters = new Set(buttons.map((button) => button.dataset.feedFilter));
   const parsedPageSize = Number.parseInt(feed.dataset.pageSize, 10);
-  const pageSize = Number.isInteger(parsedPageSize) && parsedPageSize > 0 ? parsedPageSize : 7;
+  const pageSize = Number.isInteger(parsedPageSize) && parsedPageSize > 0 ? parsedPageSize : 5;
   let activeFilter = "all";
   let activePage = 1;
 

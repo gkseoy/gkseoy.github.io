@@ -5,7 +5,7 @@
   {% assign feed_entries = feed_entries | concat: section_documents %}
 {% endfor %}
 {% assign feed_entries = feed_entries | sort: 'date' | reverse %}
-<section id="post-feed" class="post-feed" aria-label="Recent posts" data-post-feed data-page-size="7">
+<section id="post-feed" class="post-feed" aria-label="Recent posts" data-post-feed data-page-size="5">
   {% for entry in feed_entries %}
     {% include feed-entry.html entry=entry show_thumbnail=true %}
   {% else %}

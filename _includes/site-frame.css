@@ -308,13 +308,19 @@
   object-position: center;
 }
 
-.feed-thumbnail--publication-logo {
+.feed-thumbnail--publication-logo,
+.feed-thumbnail--publication-logo-inverted {
   border: 1px solid var(--portfolio-rule);
   background: #fff;
 }
 
-.feed-thumbnail--publication-logo img {
+.feed-thumbnail--publication-logo img,
+.feed-thumbnail--publication-logo-inverted img {
   padding: clamp(0.65rem, 2vw, 1rem);
+}
+
+.feed-thumbnail--publication-logo-inverted img {
+  filter: brightness(0);
 }
 
 .feed-link h2 {
@@ -461,7 +467,7 @@
 .home-page .blog-about {
   width: 100%;
   max-width: 72.5rem;
-  margin-top: clamp(2.25rem, 5vw, 4.5rem);
+  margin-top: clamp(4.5rem, 9vw, 8rem);
   margin-inline: auto;
   margin-bottom: 1rem;
 }
