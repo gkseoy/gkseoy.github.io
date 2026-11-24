@@ -459,7 +459,10 @@
 }
 
 .home-page .blog-about {
-  margin-top: auto;
+  width: 100%;
+  max-width: 72.5rem;
+  margin-top: clamp(2.25rem, 5vw, 4.5rem);
+  margin-inline: auto;
   margin-bottom: 1rem;
 }
 
