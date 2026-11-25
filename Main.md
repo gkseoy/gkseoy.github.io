@@ -95,14 +95,14 @@ body_class: resume-page
       <ul class="resume-work-list" role="list">
         <li class="resume-work-item">
           <span class="resume-work-title">MEXX Daechi</span>
-          <span class="resume-work-venue">Mathematics Teaching Assistant to Instructor Kyungsik Shin</span>
+          <span class="resume-work-venue">Mathematics Teaching Assistant to Instructor 신경식</span>
           <span class="resume-work-meta">Jan–Feb 2026 · Aug 2026–Present</span>
-          <span class="resume-work-role">6 months total</span>
+          <span class="resume-work-role">6 months</span>
         </li>
 
         <li class="resume-work-item">
           <span class="resume-work-title">MEXX Daechi</span>
-          <span class="resume-work-venue">Science Teaching Assistant to Instructor Heonjin Park</span>
+          <span class="resume-work-venue">Science Teaching Assistant to Instructor 박헌진</span>
           <span class="resume-work-meta">Mar 2024–Present</span>
           <span class="resume-work-role">2 years 9 months</span>
         </li>
@@ -125,7 +125,7 @@ body_class: resume-page
           <span class="resume-work-title">GODIVA Café Pop-Up at Shinsegae Department Store</span>
           <span class="resume-work-venue">Pop-Up Store Staff</span>
           <span class="resume-work-meta">Feb 2024</span>
-          <span class="resume-work-role">4-day temporary position</span>
+          <span class="resume-work-role">4 days</span>
         </li>
 
         <li class="resume-work-item">
