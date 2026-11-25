@@ -68,7 +68,7 @@ body_class: resume-page
   </div>
 
   <div class="resume-row">
-    <dt>Jan 2024 – Present</dt>
+    <dt>Dec 2022 – Present</dt>
     <dd>
       <button type="button" id="part-time-experience-trigger" class="resume-experience-trigger" aria-controls="part-time-experience" aria-haspopup="dialog">
         Various part-time jobs
@@ -85,7 +85,57 @@ body_class: resume-page
       <button type="submit" class="resume-experience-close" aria-label="Close" autofocus>×</button>
     </form>
     <div id="part-time-experience-content">
-      <!-- Add part-time work details here. -->
+      <h2 class="resume-experience-title">Various Part-Time Jobs</h2>
+      <ul class="resume-work-list" role="list">
+        <li class="resume-work-item">
+          <span class="resume-work-title">MEXX Daechi</span>
+          <span class="resume-work-venue">Mathematics Teaching Assistant to Instructor Kyungsik Shin</span>
+          <span class="resume-work-meta">Jan–Feb 2026 · Aug 2026–Present</span>
+          <span class="resume-work-role">6 months total</span>
+        </li>
+
+        <li class="resume-work-item">
+          <span class="resume-work-title">MEXX Daechi</span>
+          <span class="resume-work-venue">Science Teaching Assistant to Instructor Heonjin Park</span>
+          <span class="resume-work-meta">Mar 2024–Present</span>
+          <span class="resume-work-role">2 years 9 months</span>
+        </li>
+
+        <li class="resume-work-item">
+          <span class="resume-work-title">Saengkeu Academy, Daechi-dong</span>
+          <span class="resume-work-venue">Mathematics Teaching Assistant</span>
+          <span class="resume-work-meta">Jun–Aug 2025</span>
+          <span class="resume-work-role">2 months</span>
+        </li>
+
+        <li class="resume-work-item">
+          <span class="resume-work-title">Private Tutoring</span>
+          <span class="resume-work-venue">Biology Tutor for a High School Senior</span>
+          <span class="resume-work-meta">Oct 2024–Jun 2025</span>
+          <span class="resume-work-role">9 months</span>
+        </li>
+
+        <li class="resume-work-item">
+          <span class="resume-work-title">GODIVA Café Pop-Up at Shinsegae Department Store</span>
+          <span class="resume-work-venue">Pop-Up Store Staff</span>
+          <span class="resume-work-meta">Feb 2024</span>
+          <span class="resume-work-role">4-day temporary position</span>
+        </li>
+
+        <li class="resume-work-item">
+          <span class="resume-work-title">Disney 100th Anniversary Pop-Up Store</span>
+          <span class="resume-work-venue">Pop-Up Store Staff</span>
+          <span class="resume-work-meta">Dec 2023–Jan 2024</span>
+          <span class="resume-work-role">2 months</span>
+        </li>
+
+        <li class="resume-work-item">
+          <span class="resume-work-title">GODIVA Café</span>
+          <span class="resume-work-venue">Café Staff</span>
+          <span class="resume-work-meta">Dec 2022–Jan 2023</span>
+          <span class="resume-work-role">2 months</span>
+        </li>
+      </ul>
     </div>
   </div>
 </dialog>

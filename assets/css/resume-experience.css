@@ -68,6 +68,12 @@ body:has(.resume-experience-dialog[open]) {
   background: rgba(0, 0, 0, 0.08);
 }
 
+.resume-experience-title {
+  margin: 0 0 1.75rem;
+  font-size: 1.4rem;
+  line-height: 1.35;
+}
+
 .resume-work-list {
   display: grid;
   gap: 1.75rem;
