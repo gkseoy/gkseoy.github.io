@@ -68,10 +68,30 @@ body:has(.resume-experience-dialog[open]) {
   background: rgba(0, 0, 0, 0.08);
 }
 
+.resume-experience-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
 .resume-experience-title {
-  margin: 0 0 1.75rem;
+  margin: 0;
   font-size: 1.4rem;
   line-height: 1.35;
+}
+
+.resume-experience-duration-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 1rem;
+  color: var(--portfolio-text-muted, #536074);
+  font-size: 0.875rem;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: right;
 }
 
 .resume-work-list {
@@ -135,6 +155,15 @@ body:has(.resume-experience-dialog[open]) {
 }
 
 @media (max-width: 600px) {
+  .resume-experience-heading {
+    display: grid;
+  }
+
+  .resume-experience-duration-summary {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
   .resume-work-item {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:

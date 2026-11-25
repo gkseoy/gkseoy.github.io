@@ -85,7 +85,13 @@ body_class: resume-page
       <button type="submit" class="resume-experience-close" aria-label="Close" autofocus>×</button>
     </form>
     <div id="part-time-experience-content">
-      <h2 class="resume-experience-title">Various Part-Time Jobs</h2>
+      <div class="resume-experience-heading">
+        <h2 class="resume-experience-title">Various Part-Time Jobs</h2>
+        <div class="resume-experience-duration-summary" aria-label="Part-time work duration summary">
+          <span>Total: 4 years 6 months + 4 days</span>
+          <span>Without overlaps: 3 years 1 month + 4 days</span>
+        </div>
+      </div>
       <ul class="resume-work-list" role="list">
         <li class="resume-work-item">
           <span class="resume-work-title">MEXX Daechi</span>
