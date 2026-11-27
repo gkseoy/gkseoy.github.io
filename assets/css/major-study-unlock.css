@@ -1,0 +1,134 @@
+.major-study-unlock-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(26rem, calc(100% - 2rem));
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid var(--portfolio-rule, #e1e6ee);
+  border-radius: 0.85rem;
+  background: #fff;
+  color: var(--body-color, #030920);
+  box-shadow: 0 1.5rem 4rem rgba(16, 29, 56, 0.24);
+}
+
+.major-study-unlock-dialog::backdrop {
+  background: rgba(40, 47, 59, 0.52);
+}
+
+body.major-study-dialog-open {
+  overflow: hidden;
+}
+
+.major-study-unlock-panel {
+  position: relative;
+  padding: 2rem;
+}
+
+.major-study-unlock-close {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.45rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.major-study-unlock-close:hover,
+.major-study-unlock-close:focus-visible {
+  background: #eef0f3;
+}
+
+.major-study-unlock-eyebrow {
+  margin: 0 0 0.3rem;
+  color: var(--portfolio-accent, #245fba);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.major-study-unlock-panel h2 {
+  margin: 0;
+  padding-right: 1.75rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.major-study-unlock-description {
+  margin: 0.45rem 0 1.25rem;
+  color: var(--portfolio-text-muted, #536074);
+  font-size: 0.925rem;
+}
+
+.major-study-unlock-form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--portfolio-navy, #101d38);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.major-study-unlock-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+}
+
+.major-study-unlock-controls input,
+.major-study-unlock-controls button {
+  min-height: 2.65rem;
+  border-radius: 0.45rem;
+  font: inherit;
+}
+
+.major-study-unlock-controls input {
+  min-width: 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--portfolio-rule, #e1e6ee);
+  background: #fff;
+  color: inherit;
+}
+
+.major-study-unlock-controls button {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--portfolio-accent, #245fba);
+  background: var(--portfolio-accent, #245fba);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.major-study-unlock-controls button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.major-study-unlock-status {
+  min-height: 1.5em;
+  margin: 0.55rem 0 0;
+  color: #b42318;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 28rem) {
+  .major-study-unlock-panel {
+    padding: 1.5rem;
+  }
+
+  .major-study-unlock-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

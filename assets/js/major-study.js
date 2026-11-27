@@ -12,35 +12,6 @@
 
   if (!form || !passwordInput || !submitButton || !status || !gate || !content || !payloadNode) return;
 
-  const fromBase64 = (value) => {
-    const binary = window.atob(value);
-    return Uint8Array.from(binary, (character) => character.charCodeAt(0));
-  };
-
-  const deriveKey = async (password, salt) => {
-    const encoder = new TextEncoder();
-    const keyMaterial = await window.crypto.subtle.importKey(
-      "raw",
-      encoder.encode(password),
-      "PBKDF2",
-      false,
-      ["deriveKey"],
-    );
-
-    return window.crypto.subtle.deriveKey(
-      {
-        name: "PBKDF2",
-        salt,
-        iterations: 250000,
-        hash: "SHA-256",
-      },
-      keyMaterial,
-      { name: "AES-GCM", length: 256 },
-      false,
-      ["decrypt"],
-    );
-  };
-
   let payload;
   try {
     payload = JSON.parse(payloadNode.textContent);
@@ -50,9 +21,25 @@
     return;
   }
 
-  if (!window.crypto?.subtle) {
+  if (!window.MajorStudyCrypto) {
     status.textContent = "This browser does not support encrypted notes.";
     submitButton.disabled = true;
+    return;
+  }
+
+  const storageKey = `major-study-content:${window.location.pathname}`;
+  let transferredContent = null;
+  try {
+    transferredContent = window.sessionStorage.getItem(storageKey);
+    window.sessionStorage.removeItem(storageKey);
+  } catch (_error) {
+    transferredContent = null;
+  }
+
+  if (transferredContent !== null) {
+    content.innerHTML = transferredContent;
+    gate.hidden = true;
+    content.hidden = false;
     return;
   }
 
@@ -62,17 +49,7 @@
     submitButton.disabled = true;
 
     try {
-      const salt = fromBase64(payload.salt);
-      const iv = fromBase64(payload.iv);
-      const ciphertext = fromBase64(payload.ciphertext);
-      const key = await deriveKey(passwordInput.value, salt);
-      const plaintext = await window.crypto.subtle.decrypt(
-        { name: "AES-GCM", iv },
-        key,
-        ciphertext,
-      );
-
-      content.innerHTML = new TextDecoder().decode(plaintext);
+      content.innerHTML = await window.MajorStudyCrypto.decrypt(passwordInput.value, payload);
       gate.hidden = true;
       content.hidden = false;
       content.focus();

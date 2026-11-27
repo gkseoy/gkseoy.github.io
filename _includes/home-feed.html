@@ -15,4 +15,35 @@
 <p class="post-feed-empty" data-post-feed-empty hidden>No posts have been published in this section yet.</p>
 <nav class="feed-pagination" aria-label="Post pages" data-post-pagination hidden></nav>
 <p class="visually-hidden" role="status" aria-live="polite" data-post-feed-status></p>
+
+<link rel="stylesheet" href="{{ '/assets/css/major-study-unlock.css' | relative_url }}">
+
+<dialog class="major-study-unlock-dialog" data-major-study-dialog aria-labelledby="major-study-dialog-title">
+  <div class="major-study-unlock-panel">
+    <button type="button" class="major-study-unlock-close" aria-label="Close" data-major-study-dialog-close>×</button>
+    <p class="major-study-unlock-eyebrow">Major Study</p>
+    <h2 id="major-study-dialog-title" data-major-study-dialog-title>Unlock study note</h2>
+    <p class="major-study-unlock-description">Enter the password to open this note.</p>
+
+    <form class="major-study-unlock-form" data-major-study-dialog-form>
+      <label for="major-study-dialog-password">Password</label>
+      <div class="major-study-unlock-controls">
+        <input
+          id="major-study-dialog-password"
+          name="password"
+          type="password"
+          inputmode="numeric"
+          autocomplete="current-password"
+          required
+          data-major-study-dialog-password
+        >
+        <button type="submit" data-major-study-dialog-submit>Unlock</button>
+      </div>
+      <p class="major-study-unlock-status" role="status" aria-live="polite" data-major-study-dialog-status></p>
+    </form>
+  </div>
+</dialog>
+
 <script src="{{ '/assets/js/post-filter.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/major-study-crypto.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/major-study-unlock.js' | relative_url }}" defer></script>

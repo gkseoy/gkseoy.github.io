@@ -3,7 +3,17 @@
 {% assign navigation_item = site.data.navigation | where: 'url', section_url | first %}
 {% assign feed_category = entry.collection | replace: '_', '-' %}
 <article class="feed-post" data-feed-category="{{ feed_category | escape }}"{% if entry.study_order %} data-feed-order="{{ entry.study_order }}"{% endif %}>
-  <a class="feed-link" href="{{ entry.url | relative_url }}">
+  <a
+    class="feed-link"
+    href="{{ entry.url | relative_url }}"
+    {% if feed_category == 'major-studies' %}
+      data-major-study-link
+      data-major-study-title="{{ entry.title | escape }}"
+      data-major-study-salt="{{ entry.protected_salt | escape }}"
+      data-major-study-iv="{{ entry.protected_iv | escape }}"
+      data-major-study-ciphertext="{{ entry.protected_payload | escape }}"
+    {% endif %}
+  >
     {% if include.show_thumbnail and entry.thumbnail %}
       <span class="feed-thumbnail{% if entry.thumbnail_style %} feed-thumbnail--{{ entry.thumbnail_style | escape }}{% endif %}">
         <img src="{{ entry.thumbnail | relative_url | escape }}" alt="{{ entry.thumbnail_alt | default: '' | escape }}" width="160" height="90" loading="lazy">
