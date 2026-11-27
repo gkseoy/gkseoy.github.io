@@ -1,5 +1,5 @@
 {% assign feed_entries = '' | split: ',' %}
-{% assign feed_collections = 'paper_reviews,seminars,event_notes' | split: ',' %}
+{% assign feed_collections = 'paper_reviews,seminars,event_notes,major_studies' | split: ',' %}
 {% for collection in feed_collections %}
   {% include section-documents.html collection=collection %}
   {% assign feed_entries = feed_entries | concat: section_documents %}

@@ -1,0 +1,48 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ '/assets/css/major-study.css' | relative_url }}">
+
+<article class="major-study" data-major-study>
+  <header class="major-study-header">
+    <p class="major-study-eyebrow">Major Study</p>
+    <h1>{{ page.title | escape }}</h1>
+  </header>
+
+  <section class="major-study-gate" data-major-study-gate aria-labelledby="major-study-gate-title">
+    <h2 id="major-study-gate-title">Protected study note</h2>
+    <p>Enter the password to view this note.</p>
+
+    <form class="major-study-form" data-major-study-form>
+      <label for="major-study-password">Password</label>
+      <div class="major-study-controls">
+        <input
+          id="major-study-password"
+          name="password"
+          type="password"
+          inputmode="numeric"
+          autocomplete="current-password"
+          required
+          data-major-study-password
+        >
+        <button type="submit" data-major-study-submit>Unlock</button>
+      </div>
+      <p class="major-study-status" role="status" aria-live="polite" data-major-study-status></p>
+    </form>
+
+    <noscript>JavaScript is required to decrypt this note.</noscript>
+  </section>
+
+  <section class="major-study-content" data-major-study-content tabindex="-1" hidden></section>
+
+  <script type="application/json" data-major-study-payload>
+    {
+      "salt": {{ page.protected_salt | jsonify }},
+      "iv": {{ page.protected_iv | jsonify }},
+      "ciphertext": {{ page.protected_payload | jsonify }}
+    }
+  </script>
+</article>
+
+<script src="{{ '/assets/js/major-study.js' | relative_url }}" defer></script>

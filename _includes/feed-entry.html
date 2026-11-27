@@ -2,7 +2,7 @@
 {% assign section_url = entry.collection | replace: '_', '-' | prepend: '/' | append: '/' %}
 {% assign navigation_item = site.data.navigation | where: 'url', section_url | first %}
 {% assign feed_category = entry.collection | replace: '_', '-' %}
-<article class="feed-post" data-feed-category="{{ feed_category | escape }}">
+<article class="feed-post" data-feed-category="{{ feed_category | escape }}"{% if entry.study_order %} data-feed-order="{{ entry.study_order }}"{% endif %}>
   <a class="feed-link" href="{{ entry.url | relative_url }}">
     {% if include.show_thumbnail and entry.thumbnail %}
       <span class="feed-thumbnail{% if entry.thumbnail_style %} feed-thumbnail--{{ entry.thumbnail_style | escape }}{% endif %}">

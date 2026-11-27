@@ -23,6 +23,9 @@ collections:
   seminars:
     output: true
     permalink: /seminars/:name/
+  major_studies:
+    output: true
+    permalink: /major-studies/:name/
 
 defaults:
   - scope:
@@ -41,6 +44,12 @@ defaults:
       type: seminars
     values:
       layout: page
+      lang: ko
+  - scope:
+      path: ""
+      type: major_studies
+    values:
+      layout: major-study
       lang: ko
 
 plugins:

@@ -77,6 +77,23 @@
     const matchingPosts = posts.filter(
       (post) => activeFilter === "all" || post.dataset.feedCategory === activeFilter,
     );
+
+    if (activeFilter === "major-studies") {
+      matchingPosts.sort((left, right) => {
+        const leftOrder = Number.parseInt(left.dataset.feedOrder, 10);
+        const rightOrder = Number.parseInt(right.dataset.feedOrder, 10);
+        return leftOrder - rightOrder;
+      });
+    }
+
+    posts.forEach((post) => {
+      if (activeFilter === "major-studies" && post.dataset.feedOrder) {
+        post.style.order = post.dataset.feedOrder;
+      } else {
+        post.style.removeProperty("order");
+      }
+    });
+
     const pageCount = Math.ceil(matchingPosts.length / pageSize);
     const parsedPage = Number.parseInt(requestedPage, 10);
     const safePage = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;

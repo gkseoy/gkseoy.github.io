@@ -1,0 +1,109 @@
+.major-study {
+  width: min(100%, 48rem);
+  margin-inline: auto;
+}
+
+.major-study-header {
+  margin-bottom: 2rem;
+}
+
+.major-study-eyebrow {
+  margin: 0 0 0.3rem;
+  color: var(--portfolio-accent, #245fba);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.major-study-header h1 {
+  margin: 0;
+}
+
+.major-study-gate {
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--portfolio-rule, #e1e6ee);
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16, 29, 56, 0.04);
+}
+
+.major-study-gate h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+}
+
+.major-study-gate > p {
+  margin: 0 0 1.25rem;
+  color: var(--portfolio-text-muted, #536074);
+  font-size: 0.95rem;
+}
+
+.major-study-form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--portfolio-navy, #101d38);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.major-study-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.6rem;
+}
+
+.major-study-controls input,
+.major-study-controls button {
+  min-height: 2.75rem;
+  border-radius: 0.45rem;
+  font: inherit;
+}
+
+.major-study-controls input {
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--portfolio-rule, #e1e6ee);
+  background: #fff;
+  color: inherit;
+}
+
+.major-study-controls button {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--portfolio-accent, #245fba);
+  background: var(--portfolio-accent, #245fba);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.major-study-controls button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.major-study-status {
+  min-height: 1.5em;
+  margin: 0.55rem 0 0;
+  color: #b42318;
+  font-size: 0.875rem;
+}
+
+.major-study-content {
+  margin-top: 2rem;
+}
+
+.major-study-content[hidden],
+.major-study-gate[hidden] {
+  display: none;
+}
+
+.major-study-empty {
+  color: var(--portfolio-text-muted, #536074);
+}
+
+@media (max-width: 34rem) {
+  .major-study-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
