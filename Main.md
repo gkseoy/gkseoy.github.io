@@ -53,7 +53,7 @@ body_class: resume-page
 
   <div class="resume-row">
     <dt>2023</dt>
-    <dd><strong>Sookmyung Girls' High School<strong></dd>
+    <dd>Sookmyung Girls' High School</dd>
   </div>
 </dl>
 
